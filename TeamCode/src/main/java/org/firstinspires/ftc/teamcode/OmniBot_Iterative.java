@@ -32,12 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -54,15 +50,15 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Pushbot: Teleop Tank", group="Pushbot")
+@TeleOp(name="Pushbot: Omnibot Pushbot", group="Pushbot")
 //@Disabled
-public class TileRunner_Iterative extends OpMode{
+public class OmniBot_Iterative extends OpMode{
     private double position = 0.0;
     /* Declare OpMode members. */
-    private HardwareTileRunnerRobot robot; // use the class created to define a Pushbot's hardware
+    private HardwareOmniRobot robot; // use the class created to define a Pushbot's hardware
 
-    public TileRunner_Iterative() {
-        robot = new HardwareTileRunnerRobot();
+    public OmniBot_Iterative() {
+        robot = new HardwareOmniRobot();
     }
 
     // could also use HardwarePushbotMatrix class.
@@ -99,7 +95,7 @@ public class TileRunner_Iterative extends OpMode{
      */
     @Override
     public void loop() {
-        double left_stick, right_stick, power, left_trigger, right_trigger;
+        double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger;
         boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button;
 
 
@@ -108,8 +104,11 @@ public class TileRunner_Iterative extends OpMode{
 
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left_stick = -gamepad1.left_stick_y;
-        right_stick = -gamepad1.right_stick_y;
+        left_stick_x = gamepad1.left_stick_x;
+        left_stick_y = gamepad1.left_stick_y;
+        right_stick_x = gamepad1.right_stick_x;
+        right_stick_y = gamepad1.right_stick_y;
+
         left_bumper = gamepad1.left_bumper;
         right_bumper = gamepad1.right_bumper;
         left_trigger = gamepad1.left_trigger;
@@ -121,36 +120,15 @@ public class TileRunner_Iterative extends OpMode{
 
 
 
-        power = 1;
-        if(left_trigger > 0.5 ) {
-
-            left_stick = left_stick* -1;
-            power = 0.5;
-        }
+        power = .75;
 
 
-        if(right_trigger > 0.7) {
 
-                right_stick = right_stick* -1;
-                power = 0.7;
-        }
-        if (right_bumper == true){
-            position++;
-
-        }
-        if  (left_bumper == true) {
-            position--;
-        }
-
-        robot.servo_one.setPosition(position);
-        robot.setDrivePower(left_stick*power,right_stick*power);
+        robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x, right_stick_y);
 
         // Send telemetry message to signify robot running;
 
         telemetry.addLine("Controller One Telemetry:");
-
-        telemetry.addData("left stick: ",  "%.2f", left_stick);
-        telemetry.addData("right stick: ", "%.2f", right_stick);
         telemetry.addData("Left Bumper: ", left_bumper);
         telemetry.addData("Right Bumper: ", right_bumper );
         telemetry.addData("Left Trigger: ", left_trigger);
@@ -159,6 +137,7 @@ public class TileRunner_Iterative extends OpMode{
         telemetry.addData("B Button: ",b_button);
         telemetry.addData("X Button: ",x_button);
         telemetry.addData("Y Button: ", y_button);
+        telemetry.addLine("Code produced by BR Labs");
     }
 
 
