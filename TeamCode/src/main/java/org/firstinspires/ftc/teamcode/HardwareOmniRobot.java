@@ -30,7 +30,13 @@ public class HardwareOmniRobot
     public DcMotor leftMotor2 = null;
     public DcMotor rightMotor1 = null;
     public DcMotor rightMotor2 = null;
-
+    public Servo JKnock = null;
+    public Servo dumper = null;
+    public Servo grabber = null;
+    public DcMotor dump_motor = null;
+    public DcMotor grab_motor = null;
+    private final double MIN_MOTOR_OUTPUT_VALUE = -1.0;
+    private final double MAX_MOTOR_OUTPUT_VALUE = 1.0;
 
     public static final String MESSAGETAG = "5040MSG";
     private final int NAVX_DIM_I2C_PORT = 0;
@@ -58,17 +64,26 @@ public class HardwareOmniRobot
             leftMotor2 = hwMap.dcMotor.get("left_motor2");
             rightMotor1 = hwMap.dcMotor.get("right_motor1");
             rightMotor2 = hwMap.dcMotor.get("right_motor2");
+            dumper = hwMap.servo.get("dumper");
+            JKnock = hwMap.servo.get("servo_one");
+            grabber = hwMap.servo.get("grabber");
+
 
             leftMotor1.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
             leftMotor2.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
             rightMotor1.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
             rightMotor2.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-
+            grabber.setDirection(Servo.Direction.REVERSE);
             // Set all motors to zero power
             leftMotor1.setPower(0);
             rightMotor1.setPower(0);
             leftMotor2.setPower(0);
             rightMotor2.setPower(0);
+            //JKnock.setPosition(30);
+
+            grabber.setPosition(0.3);
+
+            dumper.setPosition(0.3);
 
             // Set all motors to run without encoders.
             // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -79,7 +94,7 @@ public class HardwareOmniRobot
 
             // Enable NavX Sensor
 
-            navx_device = AHRS.getInstance(hwMap.deviceInterfaceModule.get("DIM1"),
+            navx_device = AHRS.getInstance(hwMap.deviceInterfaceModule.get("DIM2"),
                     NAVX_DIM_I2C_PORT,
                     AHRS.DeviceDataType.kProcessedData,
                     NAVX_DEVICE_UPDATE_RATE_HZ);
@@ -90,13 +105,9 @@ public class HardwareOmniRobot
         }
     }
 
-    public void setDrivePower(double leftMotors, double rightMotors){
 
-        leftMotor1.setPower(leftMotors);
-        rightMotor1.setPower(rightMotors);
-        leftMotor2.setPower(leftMotors);
-        rightMotor2.setPower(rightMotors);
-    }
+
+
 
     /***
      *
@@ -128,28 +139,27 @@ public class HardwareOmniRobot
 
      */
 
+    //rx *= -1;
+    //ry *= -1;
+    public double limit(double a) {
+        return Math.min(Math.max(a, MIN_MOTOR_OUTPUT_VALUE), MAX_MOTOR_OUTPUT_VALUE);
+    }
 
-    public void onmiDrive (double rx, double ry, double lx, double ly)
+    public void onmiDrive (double sideways, double forward, double rotation)
     {
 
-        rx *= -1;
-        ry *= -1;
-        //rx *= .75;
-        //ry *= -.75;
-        //lx *= .75;
-        //ly *= .75;
-        leftMotor1.setPower(((-ry - rx)/2) * 1 + (-.75 * lx));
-        leftMotor2.setPower(((-ry + rx)/2) * 1 + (-.75 * lx));
-        rightMotor1.setPower(((ry - rx)/2) * 1 + (-.75 * lx));
-        rightMotor2.setPower(((ry + rx)/2) * 1 + (-.75 * lx));
 
-
-           /* leftMotor1.setPower(.5);
-            leftMotor2.setPower(.5);
-            rightMotor1.setPower(.5);
-            rightMotor2.setPower(.5);*/
-
+        try {
+            leftMotor1.setPower(limit(((-forward - sideways)/2) * 1 + (-1 * rotation)));
+            leftMotor2.setPower(limit(((-forward + sideways)/2) * 1 + (-1 * rotation)));
+            rightMotor1.setPower(limit(((forward - sideways)/2) * 1 + (-1 * rotation)));
+            rightMotor2.setPower(limit(((forward + sideways)/2) * 1 + (-1 * rotation)));
+        } catch (Exception e) {
+            RobotLog.ee(MESSAGETAG, e.getStackTrace().toString());
+        }
 
 
     }
+
+
 }

@@ -31,7 +31,7 @@ public class HardwareTileRunnerRobot
     public DcMotor leftMotor2 = null;
     public DcMotor rightMotor1 = null;
     public DcMotor rightMotor2 = null;
-    public Servo servo_one = null;
+    //b6public Servo servo_one = null;
 
     public static final String MESSAGETAG = "5040MSG";
     private final int NAVX_DIM_I2C_PORT = 0;
@@ -59,7 +59,7 @@ public class HardwareTileRunnerRobot
             leftMotor2 = hwMap.dcMotor.get("right_motor2");
             rightMotor1 = hwMap.dcMotor.get("left_motor1");
             rightMotor2 = hwMap.dcMotor.get("left_motor2");
-            servo_one = hwMap.servo.get("servant");
+            //servo_one = hwMap.servo.get("servant");
             leftMotor1.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
             leftMotor2.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
             rightMotor1.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors

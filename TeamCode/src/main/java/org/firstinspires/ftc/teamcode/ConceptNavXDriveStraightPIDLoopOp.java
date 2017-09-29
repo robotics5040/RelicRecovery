@@ -65,7 +65,7 @@ public class ConceptNavXDriveStraightPIDLoopOp extends OpMode {
     /* This is the port on the Core Device Interface Module        */
     /* in which the navX-Model Device is connected.  Modify this  */
     /* depending upon which I2C port you are using.               */
-    HardwareTileRunnerRobot  robot   = new HardwareTileRunnerRobot();
+    HardwareOmniRobot  robot   = new HardwareOmniRobot();
 
     private navXPIDController yawPIDController;
     private ElapsedTime runtime = new ElapsedTime();
@@ -144,12 +144,12 @@ public class ConceptNavXDriveStraightPIDLoopOp extends OpMode {
 
             if (yawPIDController.isNewUpdateAvailable(yawPIDResult)) {
                 if (yawPIDResult.isOnTarget()) {
-                    robot.setDrivePower(drive_speed,drive_speed);
+                    robot.onmiDrive(0,drive_speed,0);
                     telemetry.addData("Motor Output", df.format(drive_speed) + ", " +
                             df.format(drive_speed));
                 } else {
                     double output = yawPIDResult.getOutput();
-                    robot.setDrivePower(limit(drive_speed - output),limit(drive_speed + output));
+                    robot.onmiDrive(0,drive_speed,output);
                     telemetry.addData("Motor Output", df.format(limit(drive_speed + output)) + ", " +
                             df.format(limit(drive_speed - output)));
                 }

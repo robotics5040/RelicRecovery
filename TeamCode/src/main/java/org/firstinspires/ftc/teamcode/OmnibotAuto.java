@@ -32,6 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -50,15 +51,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Pushbot: Omnibot Pushbot", group="Pushbot")
+@Autonomous(name="Pushbot: Autotest", group="Pushbot")
 //@Disabled
-public class OmniBot_Iterative extends OpMode{
+public class OmnibotAuto extends OpMode{
     private double position = 0.0;
-    public int  pressed = 0;
+    public int pressed = 0;
     /* Declare OpMode members. */
     private HardwareOmniRobot robot; // use the class created to define a Pushbot's hardware
 
-    public OmniBot_Iterative() {
+    public OmnibotAuto() {
         robot = new HardwareOmniRobot();
     }
 
@@ -96,68 +97,6 @@ public class OmniBot_Iterative extends OpMode{
      */
     @Override
     public void loop() {
-        double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX;
-        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button;
-
-
-
-
-
-
-        // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left_stick_x = gamepad1.left_stick_x;
-        left_stick_y = gamepad1.left_stick_y;
-        right_stick_x = gamepad1.right_stick_x;
-        right_stick_y = gamepad1.right_stick_y;
-
-        left_bumper = gamepad1.left_bumper;
-        right_bumper = gamepad1.right_bumper;
-        left_trigger = gamepad1.left_trigger;
-        right_trigger = gamepad1.right_trigger;
-        a_button = gamepad1.a;
-        b_button = gamepad1.b;
-        x_button = gamepad1.x;
-        y_button = gamepad1.y;
-        LX = gamepad2.left_stick_y;
-        RX = gamepad2.right_stick_y;
-
-
-
-
-        power = .75;
-
-        if (a_button == true) {
-
-           robot.JKnock.setPosition(0.9);
-
-
-        }
-        if (b_button == true) {
-            robot.JKnock.setPosition(0.0);
-
-        }
-
-        //robot.JKnock.setPosition(0.9);
-
-
-        robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
-        robot.grabber.setPosition(0.3);
-        // Send telemetry message to signify robot running;
-        telemetry.addData("grabber: ",robot.grabber.getPosition());
-        telemetry.addData("dumper ",robot.dumper.getPosition());
-        telemetry.addLine("Controller One Telemetry:");
-        telemetry.addData("Left Bumper: ", left_bumper);
-        telemetry.addData("Right Bumper: ", right_bumper );
-        telemetry.addData("Left Trigger: ", left_trigger);
-        telemetry.addData("Right Trigger: ", right_trigger);
-        telemetry.addData("A Button: ",a_button);
-        telemetry.addData("B Button: ",b_button);
-        telemetry.addData("X Button: ",x_button);
-        telemetry.addData("Y Button: ", y_button);
-        telemetry.addData("2nd Left Trigger",LX);
-        telemetry.addData("2nd Right Trigger",RX);
-        telemetry.addData("Pressed" ,pressed % 2);
-        telemetry.addLine("What is my name?: 474675627377");
 
     }
 

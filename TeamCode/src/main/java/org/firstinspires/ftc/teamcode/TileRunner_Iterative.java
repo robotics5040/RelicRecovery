@@ -122,27 +122,10 @@ public class TileRunner_Iterative extends OpMode{
 
 
         power = 1;
-        if(left_trigger > 0.5 ) {
-
-            left_stick = left_stick* -1;
-            power = 0.5;
-        }
 
 
-        if(right_trigger > 0.7) {
 
-                right_stick = right_stick* -1;
-                power = 0.7;
-        }
-        if (right_bumper == true){
-            position++;
 
-        }
-        if  (left_bumper == true) {
-            position--;
-        }
-
-        robot.servo_one.setPosition(position);
         robot.setDrivePower(left_stick*power,right_stick*power);
 
         // Send telemetry message to signify robot running;
