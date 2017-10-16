@@ -140,7 +140,7 @@ public class ConceptNavXDriveStraightPIDLoopOp extends OpMode {
              */
 
             /* Drive straight forward at 1/2 of full drive speed */
-            double drive_speed = 0.5;
+            double drive_speed = 1.0;
 
             if (yawPIDController.isNewUpdateAvailable(yawPIDResult)) {
                 if (yawPIDResult.isOnTarget()) {

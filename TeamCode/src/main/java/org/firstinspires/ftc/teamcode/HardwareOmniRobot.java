@@ -30,11 +30,13 @@ public class HardwareOmniRobot
     public DcMotor leftMotor2 = null;
     public DcMotor rightMotor1 = null;
     public DcMotor rightMotor2 = null;
-    public Servo JKnock = null;
+    public Servo jknock = null;
     public Servo dumper = null;
     public Servo grabber = null;
-    public DcMotor dump_motor = null;
-    public DcMotor grab_motor = null;
+    public Servo claw1 = null;
+    public Servo claw2 = null;
+    public DcMotor reel = null;
+    public DcMotor slide = null;
     private final double MIN_MOTOR_OUTPUT_VALUE = -1.0;
     private final double MAX_MOTOR_OUTPUT_VALUE = 1.0;
 
@@ -59,50 +61,63 @@ public class HardwareOmniRobot
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        try {
+        //try {
             leftMotor1 = hwMap.dcMotor.get("left_motor1");
             leftMotor2 = hwMap.dcMotor.get("left_motor2");
             rightMotor1 = hwMap.dcMotor.get("right_motor1");
             rightMotor2 = hwMap.dcMotor.get("right_motor2");
+            slide = hwMap.dcMotor.get("slide");
+            reel = hwMap.dcMotor.get("reel");
             dumper = hwMap.servo.get("dumper");
-            JKnock = hwMap.servo.get("servo_one");
+            claw1 = hwMap.servo.get("claw_1");
             grabber = hwMap.servo.get("grabber");
+            claw2 = hwMap.servo.get("claw_2");
+            jknock = hwMap.servo.get("jknock");
 
-
+            reel.setDirection(DcMotor.Direction.FORWARD);
+            slide.setDirection(DcMotor.Direction.REVERSE);
             leftMotor1.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
             leftMotor2.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
             rightMotor1.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
             rightMotor2.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
             grabber.setDirection(Servo.Direction.REVERSE);
+
             // Set all motors to zero power
             leftMotor1.setPower(0);
             rightMotor1.setPower(0);
             leftMotor2.setPower(0);
             rightMotor2.setPower(0);
-            //JKnock.setPosition(30);
+            slide.setPower(0);
+            reel.setPower(0);
+            jknock.setPosition(1);
+            claw1.setPosition(.35);
+            claw2.setPosition(.5);
+            grabber.scaleRange(0.0, 0.25);
+            grabber.setPosition(0.220);
 
-            grabber.setPosition(0.3);
-
-            dumper.setPosition(0.3);
+            dumper.setPosition(0);
 
             // Set all motors to run without encoders.
             // May want to use RUN_USING_ENCODERS if encoders are installed.
-            leftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //leftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //rightMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //leftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //rightMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //reel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
             // Enable NavX Sensor
 
-            navx_device = AHRS.getInstance(hwMap.deviceInterfaceModule.get("DIM2"),
+            navx_device = AHRS.getInstance(hwMap.deviceInterfaceModule.get("DIM"),
                     NAVX_DIM_I2C_PORT,
                     AHRS.DeviceDataType.kProcessedData,
                     NAVX_DEVICE_UPDATE_RATE_HZ);
-        } catch (Exception e) {
+       /* } catch (Exception e) {
 
             RobotLog.ee(MESSAGETAG,e.getMessage());
 
-        }
+        }*/
     }
 
 
@@ -145,15 +160,41 @@ public class HardwareOmniRobot
         return Math.min(Math.max(a, MIN_MOTOR_OUTPUT_VALUE), MAX_MOTOR_OUTPUT_VALUE);
     }
 
+    public void relicLifter(boolean dup, boolean ddown, boolean dleft, boolean dright) {
+            if ((dup == true) && (ddown == false)) {
+                slide.setPower(30);
+            }
+            else if ((dup == false)&&(ddown == true)) {
+                slide.setPower(-30);
+
+            }
+            else {
+                slide.setPower(0);
+            }
+
+            if ((dleft == true)&&(dright == false)) {
+                reel.setPower(30);
+            }
+            else  if ((dleft == false)&&(dright== true)) {
+                reel.setPower(-30);
+            }
+            else {
+
+                reel.setPower(0);
+            }
+
+    }
+
+
     public void onmiDrive (double sideways, double forward, double rotation)
     {
 
 
         try {
-            leftMotor1.setPower(limit(((-forward - sideways)/2) * 1 + (-1 * rotation)));
-            leftMotor2.setPower(limit(((-forward + sideways)/2) * 1 + (-1 * rotation)));
-            rightMotor1.setPower(limit(((forward - sideways)/2) * 1 + (-1 * rotation)));
-            rightMotor2.setPower(limit(((forward + sideways)/2) * 1 + (-1 * rotation)));
+            leftMotor1.setPower(limit(((forward - sideways)/2) * .5 + (-.3 * rotation)));
+            leftMotor2.setPower(limit(((forward + sideways)/2) * .5 + (-.3 * rotation)));
+            rightMotor1.setPower(limit(((-forward - sideways)/2) * .5 + (-.3 * rotation)));
+            rightMotor2.setPower(limit(((-forward + sideways)/2) * .5 + (-.3 * rotation)));
         } catch (Exception e) {
             RobotLog.ee(MESSAGETAG, e.getStackTrace().toString());
         }

@@ -97,7 +97,7 @@ public class OmniBot_Iterative extends OpMode{
     @Override
     public void loop() {
         double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX;
-        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button;
+        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright;
 
 
 
@@ -110,42 +110,73 @@ public class OmniBot_Iterative extends OpMode{
         right_stick_x = gamepad1.right_stick_x;
         right_stick_y = gamepad1.right_stick_y;
 
-        left_bumper = gamepad1.left_bumper;
-        right_bumper = gamepad1.right_bumper;
+        left_bumper = gamepad2.left_bumper;
+        right_bumper = gamepad2.right_bumper;
         left_trigger = gamepad1.left_trigger;
         right_trigger = gamepad1.right_trigger;
         a_button = gamepad1.a;
         b_button = gamepad1.b;
-        x_button = gamepad1.x;
+        x_button = gamepad2.x;
         y_button = gamepad1.y;
         LX = gamepad2.left_stick_y;
         RX = gamepad2.right_stick_y;
+        dup = gamepad2.dpad_up;
+        ddown = gamepad2.dpad_down;
+        dleft = gamepad2.dpad_left;
+        dright = gamepad2.dpad_right;
 
-
+        //robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
 
 
         power = .75;
 
-        if (a_button == true) {
 
-           robot.JKnock.setPosition(0.9);
 
+        if (left_bumper == true) {
+                robot.grabber.setPosition(1);
 
         }
-        if (b_button == true) {
-            robot.JKnock.setPosition(0.0);
+        else {
+            robot.grabber.setPosition(0.0);
+        }
+        if (right_bumper == true) {
+            robot.dumper.setPosition(.5);
 
+        }
+        else {
+            robot.dumper.setPosition(0);
+        }
+
+        if ((x_button == true)&& (left_bumper == false) ) {
+            robot.claw1.setPosition(1);
+            robot.claw2.setPosition(.0);
+        }
+        else if (x_button == true) {
+                robot.claw1.setPosition(0.75);
+            robot.claw2.setPosition(0.25);
+        }
+        else {
+            robot.claw1.setPosition(0.35);
+            robot.claw2.setPosition(0.5);
+        }
+
+
+        if (dup == true){
+            robot.slide.setTargetPosition(6500);
+        }
+        else if(ddown == true){
+            robot.slide.setTargetPosition(0);
         }
 
         //robot.JKnock.setPosition(0.9);
 
+        //robot.relicLifter(dup,ddown,dleft,dright);
 
         robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
-        robot.grabber.setPosition(0.3);
+        //robot.grabber.setPosition(0.0);
         // Send telemetry message to signify robot running;
-        telemetry.addData("grabber: ",robot.grabber.getPosition());
-        telemetry.addData("dumper ",robot.dumper.getPosition());
-        telemetry.addLine("Controller One Telemetry:");
+
+        telemetry.addLine("Controller Telemetry:");
         telemetry.addData("Left Bumper: ", left_bumper);
         telemetry.addData("Right Bumper: ", right_bumper );
         telemetry.addData("Left Trigger: ", left_trigger);
@@ -156,7 +187,6 @@ public class OmniBot_Iterative extends OpMode{
         telemetry.addData("Y Button: ", y_button);
         telemetry.addData("2nd Left Trigger",LX);
         telemetry.addData("2nd Right Trigger",RX);
-        telemetry.addData("Pressed" ,pressed % 2);
         telemetry.addLine("What is my name?: 474675627377");
 
     }
