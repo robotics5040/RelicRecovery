@@ -10,22 +10,22 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  * Created by Veggie on 9/17/2017.
  *
  */
-@TeleOp(name="Demo: Flex Sensor", group="Iterative Opmode")
-public class FlexSensor extends OpMode{
+//@TeleOp(name="Demo: Flex Sensor", group="Iterative Opmode")
+public class FlexSensor{
 
-    private double tolerance = 0.25;
+    private double final TOLERANCE = 0.25;
+
     private double flexCurrent;
     private double flexPrevious;
     private int columnNum = 0;
     private AnalogInput voltageIn;
 
 
-    @Override
-    public void init() {
+    public FlexSensor() {
         voltageIn = hardwareMap.analogInput.get("flx");
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Flex Sensor Status:", "Initialized");
     }
-
+/* used to test the class
     @Override
     public void loop(){
         if(gamepad1.dpad_up){
@@ -36,22 +36,21 @@ public class FlexSensor extends OpMode{
         if(gamepad1.b){
             columnNum = 0;
         }
+        /*   Left ovever Debug Stuff
         telemetry.addData("Tolerance: ", getTolerance());
         telemetry.addData("Flex Value: ", getFlex());
         telemetry.addData("Column Num: ", testColumnNum());
-    }
+        */
 
 
     /**
      * Tests the amount of columns detected by the flex sensor.
      * @return the number of columns passed by the robot
      */
-
-
-    public int testColumnNum(){
+    public int getColumnNum(){
         flexCurrent = voltageIn.getVoltage();
 
-        if (flexPrevious - tolerance > flexCurrent) {
+        if (flexPrevious - TOLERANCE > flexCurrent) {
             columnNum++;
         }
         flexPrevious = flexCurrent;
@@ -63,7 +62,7 @@ public class FlexSensor extends OpMode{
         return flexCurrent;
     }
     public double getTolerance() {
-        return tolerance;
+        return TOLERANCE;
     }
 }
 
