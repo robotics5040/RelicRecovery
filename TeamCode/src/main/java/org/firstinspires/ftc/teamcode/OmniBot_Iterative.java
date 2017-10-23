@@ -98,7 +98,7 @@ public class OmniBot_Iterative extends OpMode{
     @Override
     public void loop() {
         double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX;
-        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,b_button2;
+        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,d_up1,d_down1,d_left1,d_right1;
 
 
 
@@ -126,13 +126,29 @@ public class OmniBot_Iterative extends OpMode{
         ddown = gamepad2.dpad_down;
         dleft = gamepad2.dpad_left;
         dright = gamepad2.dpad_right;
+        left_bump1 = gamepad1.left_bumper;
+        d_down1 = gamepad1.dpad_down;
+        d_up1 = gamepad1.dpad_up;
+        d_left1 = gamepad1.dpad_left;
+        d_right1 = gamepad1.dpad_right;
 
         //robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
 
 
         robot.grabber.setPower(1);
 
-
+        if(d_down1 == true) {
+            robot.onmiDrive(0.0, 0.4, 0.0);
+        }
+        if(d_up1 == true) {
+            robot.onmiDrive(0.0, -0.4, 0.0);
+        }
+        if(d_left1 == true) {
+            robot.onmiDrive(-0.4, 0.0, 0.0);
+        }
+        if(d_right1 == true) {
+            robot.onmiDrive(0.4, 0.0, 0.0);
+        }
 
         if (left_bumper == true) {
             robot.grabber.setTargetPosition(1437);
@@ -141,6 +157,13 @@ public class OmniBot_Iterative extends OpMode{
         else {
             robot.grabber.setTargetPosition(0);
         }
+        if(left_bump1 == true) {
+            robot.wheelie.setPower(1.0);
+        }
+        else {
+            robot.wheelie.setPower(0.0);
+        }
+
         if (right_bumper == true) {
             robot.dumper.setPosition(.5);
 

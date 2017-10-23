@@ -25,11 +25,15 @@ import com.qualcomm.robotcore.util.RobotLog;
  */
 public class HardwareOmniRobot
 {
+    ElapsedTime runtime = new ElapsedTime();
+
     /* Public OpMode members. */
     public DcMotor leftMotor1 = null;
     public DcMotor leftMotor2 = null;
     public DcMotor rightMotor1 = null;
     public DcMotor rightMotor2 = null;
+    public DcMotor wheelie = null;
+    public DcMotor grabber = null;
     public Servo jknock = null;
     public Servo dumper = null;
     // public Servo grabber = null;
@@ -37,7 +41,6 @@ public class HardwareOmniRobot
     public Servo claw2 = null;
     public DcMotor reel = null;
     public DcMotor slide = null;
-    public DcMotor grabber = null;
     private final double MIN_MOTOR_OUTPUT_VALUE = -1.0;
     private final double MAX_MOTOR_OUTPUT_VALUE = 1.0;
 
@@ -63,6 +66,19 @@ public class HardwareOmniRobot
 
         // Define and Initialize Motors
         //try {
+            leftMotor1 = hwMap.dcMotor.get("left_motor1");
+            leftMotor2 = hwMap.dcMotor.get("left_motor2");
+            rightMotor1 = hwMap.dcMotor.get("right_motor1");
+            rightMotor2 = hwMap.dcMotor.get("right_motor2");
+            wheelie = hwMap.dcMotor.get("wheelie");
+            grabber = hwMap.dcMotor.get("grabber");
+            slide = hwMap.dcMotor.get("slide");
+            reel = hwMap.dcMotor.get("reel");
+            dumper = hwMap.servo.get("dumper");
+            claw1 = hwMap.servo.get("claw_1");
+            //grabber = hwMap.servo.get("grabber");
+            claw2 = hwMap.servo.get("claw_2");
+            jknock = hwMap.servo.get("jknock");
         leftMotor1 = hwMap.dcMotor.get("left_motor1");
         leftMotor2 = hwMap.dcMotor.get("left_motor2");
         rightMotor1 = hwMap.dcMotor.get("right_motor1");
@@ -86,7 +102,34 @@ public class HardwareOmniRobot
         grabber.setDirection(DcMotor.Direction.REVERSE);
         grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         grabber.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            reel.setDirection(DcMotor.Direction.FORWARD);
+            slide.setDirection(DcMotor.Direction.REVERSE);
+            leftMotor1.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+            leftMotor2.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+            rightMotor1.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+            rightMotor2.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+            wheelie.setDirection(DcMotor.Direction.REVERSE);
+            //grabber.setDirection(Servo.Direction.REVERSE);
+            grabber.setDirection(DcMotor.Direction.REVERSE);
+            grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            grabber.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+            // Set all motors to zero power
+            leftMotor1.setPower(0);
+            rightMotor1.setPower(0);
+            leftMotor2.setPower(0);
+            rightMotor2.setPower(0);
+            wheelie.setPower(0);
+            slide.setPower(0);
+            reel.setPower(0);
+            jknock.setPosition(1);
+            claw1.setPosition(.35);
+            claw2.setPosition(.5);
+            //grabber.scaleRange(0.0, 0.25);
+            //grabber.setPosition(0.220);
+            
+            grabber.setPower(0.75);
+            grabber.setTargetPosition(1430);
 
         // Set all motors to zero power
         leftMotor1.setPower(0);
@@ -210,6 +253,15 @@ public class HardwareOmniRobot
 
 
     }
+    public void DriveFor(double time, double speed) {
 
+        onmiDrive(0.0,-speed,0.0);
+        runtime.reset();
+
+        while ((runtime.seconds() < time)) {
+
+        }
+        onmiDrive(0.0, 0.0, 0.0);
+    }
 
 }
