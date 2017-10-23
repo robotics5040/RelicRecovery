@@ -54,6 +54,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //@Disabled
 public class OmniBot_Iterative extends OpMode{
     private double position = 0.0;
+
     public int  pressed = 0;
     /* Declare OpMode members. */
     private HardwareOmniRobot robot; // use the class created to define a Pushbot's hardware
@@ -97,7 +98,7 @@ public class OmniBot_Iterative extends OpMode{
     @Override
     public void loop() {
         double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX;
-        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright;
+        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,b_button2;
 
 
 
@@ -117,7 +118,8 @@ public class OmniBot_Iterative extends OpMode{
         a_button = gamepad1.a;
         b_button = gamepad1.b;
         x_button = gamepad2.x;
-        y_button = gamepad1.y;
+        y_button = gamepad2.y;
+        //b_button2 = gamepad2.b;
         LX = gamepad2.left_stick_y;
         RX = gamepad2.right_stick_y;
         dup = gamepad2.dpad_up;
@@ -128,16 +130,16 @@ public class OmniBot_Iterative extends OpMode{
         //robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
 
 
-        power = .75;
+        robot.grabber.setPower(1);
 
 
 
         if (left_bumper == true) {
-                robot.grabber.setPosition(1);
+            robot.grabber.setTargetPosition(1437);
 
         }
         else {
-            robot.grabber.setPosition(0.0);
+            robot.grabber.setTargetPosition(0);
         }
         if (right_bumper == true) {
             robot.dumper.setPosition(.5);
@@ -152,21 +154,26 @@ public class OmniBot_Iterative extends OpMode{
             robot.claw2.setPosition(.0);
         }
         else if (x_button == true) {
-                robot.claw1.setPosition(0.75);
+            robot.claw1.setPosition(0.75);
             robot.claw2.setPosition(0.25);
+        }
+        else if(y_button == true) {
+            robot.claw1.setPosition(0.60);
+            robot.claw2.setPosition(0.35);
         }
         else {
             robot.claw1.setPosition(0.35);
             robot.claw2.setPosition(0.5);
         }
+        /*if (b_button2 == true) {
+            robot.grabber.setPower(-0.1);
+
+        }
+        else {
+            robot.grabber.setPower(0);
+        }*/
 
 
-        if (dup == true){
-            robot.slide.setTargetPosition(6500);
-        }
-        else if(ddown == true){
-            robot.slide.setTargetPosition(0);
-        }
 
         //robot.JKnock.setPosition(0.9);
 
