@@ -7,6 +7,22 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
+import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 /**
  * This is NOT an opmode.
@@ -56,6 +72,7 @@ public class HardwareOmniRobot
     /* Constructor */
     public HardwareOmniRobot(){
 
+
         hwMap = null;
     }
 
@@ -79,18 +96,6 @@ public class HardwareOmniRobot
             //grabber = hwMap.servo.get("grabber");
             claw2 = hwMap.servo.get("claw_2");
             jknock = hwMap.servo.get("jknock");
-        leftMotor1 = hwMap.dcMotor.get("left_motor1");
-        leftMotor2 = hwMap.dcMotor.get("left_motor2");
-        rightMotor1 = hwMap.dcMotor.get("right_motor1");
-        rightMotor2 = hwMap.dcMotor.get("right_motor2");
-        slide = hwMap.dcMotor.get("slide");
-        reel = hwMap.dcMotor.get("reel");
-        dumper = hwMap.servo.get("dumper");
-        claw1 = hwMap.servo.get("claw_1");
-        //grabber = hwMap.servo.get("grabber");
-        claw2 = hwMap.servo.get("claw_2");
-        jknock = hwMap.servo.get("jknock");
-        grabber = hwMap.dcMotor.get("grabber");
 
         reel.setDirection(DcMotor.Direction.FORWARD);
         slide.setDirection(DcMotor.Direction.REVERSE);
@@ -102,17 +107,6 @@ public class HardwareOmniRobot
         grabber.setDirection(DcMotor.Direction.REVERSE);
         grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         grabber.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            reel.setDirection(DcMotor.Direction.FORWARD);
-            slide.setDirection(DcMotor.Direction.REVERSE);
-            leftMotor1.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            leftMotor2.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            rightMotor1.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-            rightMotor2.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-            wheelie.setDirection(DcMotor.Direction.REVERSE);
-            //grabber.setDirection(Servo.Direction.REVERSE);
-            grabber.setDirection(DcMotor.Direction.REVERSE);
-            grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            grabber.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // Set all motors to zero power
             leftMotor1.setPower(0);
@@ -130,22 +124,6 @@ public class HardwareOmniRobot
             
             grabber.setPower(0.75);
             grabber.setTargetPosition(1430);
-
-        // Set all motors to zero power
-        leftMotor1.setPower(0);
-        rightMotor1.setPower(0);
-        leftMotor2.setPower(0);
-        rightMotor2.setPower(0);
-        slide.setPower(0);
-        reel.setPower(0);
-        jknock.setPosition(1);
-        claw1.setPosition(.35);
-        claw2.setPosition(.5);
-        //grabber.scaleRange(0.0, 0.25);
-        //grabber.setPosition(0.220);aqw
-
-        grabber.setPower(0.75);
-        grabber.setTargetPosition(1430);
 
         dumper.setPosition(0);
 
@@ -253,15 +231,15 @@ public class HardwareOmniRobot
 
 
     }
+
     public void DriveFor(double time, double speed) {
 
-        onmiDrive(0.0,-speed,0.0);
-        runtime.reset();
+        onmiDrive(0.0,-speed,0.0); //starts moving in wanted direction
+        runtime.reset(); //resets time
 
-        while ((runtime.seconds() < time)) {
-
+        while ((runtime.seconds() < time)) {    //runs for amount of time wanted
         }
-        onmiDrive(0.0, 0.0, 0.0);
+        onmiDrive(0.0, 0.0, 0.0); //stops  moving after
     }
 
 }

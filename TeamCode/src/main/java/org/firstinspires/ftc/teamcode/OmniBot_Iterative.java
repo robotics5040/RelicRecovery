@@ -158,7 +158,7 @@ public class OmniBot_Iterative extends OpMode{
             robot.grabber.setTargetPosition(0);
         }
         if(left_bump1 == true) {
-            robot.wheelie.setPower(1.0);
+            robot.wheelie.setPower(-1.0);
         }
         else {
             robot.wheelie.setPower(0.0);
