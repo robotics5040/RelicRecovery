@@ -137,6 +137,7 @@ public class OmniBot_Iterative extends OpMode{
 
         robot.grabber.setPower(1);
 
+        //slight adjustments for driver
         if(d_down1 == true) {
             robot.onmiDrive(0.0, 0.4, 0.0);
         }
@@ -176,6 +177,7 @@ public class OmniBot_Iterative extends OpMode{
         else {
             robot.dumper.setPosition(0);
         }
+
 
         if ((x_button == true)&& (left_bumper == false) ) {
             robot.claw1.setPosition(1);

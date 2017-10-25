@@ -78,7 +78,6 @@ public class OmnibotAuto extends LinearOpMode {
         telemetry.update();
 
         robot.JewelKnock();
-
         robot.DriveFor(1.2, 1.0, 0.0);
         robot.DriveFor(5.0, 0.0, 0.0);
         robot.grabber.setTargetPosition(0);
