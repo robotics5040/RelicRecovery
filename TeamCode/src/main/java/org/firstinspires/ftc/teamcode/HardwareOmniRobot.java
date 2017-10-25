@@ -4,6 +4,7 @@ import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
@@ -42,6 +44,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 public class HardwareOmniRobot
 {
     ElapsedTime runtime = new ElapsedTime();
+
+    ColorSensor jkcolor;
+    OpticalDistanceSensor odsfront;
+    OpticalDistanceSensor odsback;
+    OpticalDistanceSensor odsleft1;
+    OpticalDistanceSensor odsleft2;
 
     /* Public OpMode members. */
     public DcMotor leftMotor1 = null;
@@ -72,7 +80,6 @@ public class HardwareOmniRobot
     /* Constructor */
     public HardwareOmniRobot(){
 
-
         hwMap = null;
     }
 
@@ -83,19 +90,24 @@ public class HardwareOmniRobot
 
         // Define and Initialize Motors
         //try {
-            leftMotor1 = hwMap.dcMotor.get("left_motor1");
-            leftMotor2 = hwMap.dcMotor.get("left_motor2");
-            rightMotor1 = hwMap.dcMotor.get("right_motor1");
-            rightMotor2 = hwMap.dcMotor.get("right_motor2");
-            wheelie = hwMap.dcMotor.get("wheelie");
-            grabber = hwMap.dcMotor.get("grabber");
-            slide = hwMap.dcMotor.get("slide");
-            reel = hwMap.dcMotor.get("reel");
-            dumper = hwMap.servo.get("dumper");
-            claw1 = hwMap.servo.get("claw_1");
-            //grabber = hwMap.servo.get("grabber");
-            claw2 = hwMap.servo.get("claw_2");
-            jknock = hwMap.servo.get("jknock");
+        leftMotor1 = hwMap.dcMotor.get("left_motor1");
+        leftMotor2 = hwMap.dcMotor.get("left_motor2");
+        rightMotor1 = hwMap.dcMotor.get("right_motor1");
+        rightMotor2 = hwMap.dcMotor.get("right_motor2");
+        wheelie = hwMap.dcMotor.get("wheelie");
+        grabber = hwMap.dcMotor.get("grabber");
+        slide = hwMap.dcMotor.get("slide");
+        reel = hwMap.dcMotor.get("reel");
+        dumper = hwMap.servo.get("dumper");
+        claw1 = hwMap.servo.get("claw_1");
+        //grabber = hwMap.servo.get("grabber");
+        claw2 = hwMap.servo.get("claw_2");
+        jknock = hwMap.servo.get("jknock");
+        jkcolor = hwMap.colorSensor.get("color_sense");
+        odsfront = hwMap.opticalDistanceSensor.get("ODSFront");
+        odsback = hwMap.opticalDistanceSensor.get("ODSBack");
+        odsleft1 = hwMap.opticalDistanceSensor.get("ODSLeft2");
+        odsleft2 = hwMap.opticalDistanceSensor.get("ODSLeft1");
 
         reel.setDirection(DcMotor.Direction.FORWARD);
         slide.setDirection(DcMotor.Direction.REVERSE);
@@ -116,9 +128,9 @@ public class HardwareOmniRobot
             wheelie.setPower(0);
             slide.setPower(0);
             reel.setPower(0);
-            jknock.setPosition(1);
-            claw1.setPosition(.35);
-            claw2.setPosition(.5);
+            jknock.setPosition(1.2);
+            claw1.setPosition(.75);
+            claw2.setPosition(.25);
             //grabber.scaleRange(0.0, 0.25);
             //grabber.setPosition(0.220);
             
@@ -232,14 +244,82 @@ public class HardwareOmniRobot
 
     }
 
-    public void DriveFor(double time, double speed) {
+    public void DriveFor(double time, double forward, double rotate) {
 
-        onmiDrive(0.0,-speed,0.0); //starts moving in wanted direction
+        onmiDrive(0.0,-forward,rotate); //starts moving in wanted direction
         runtime.reset(); //resets time
 
         while ((runtime.seconds() < time)) {    //runs for amount of time wanted
         }
         onmiDrive(0.0, 0.0, 0.0); //stops  moving after
+    }
+
+    public void JewelKnock() {
+
+        boolean decided = false;
+        runtime.reset();
+        jkcolor.enableLed(true);
+        jknock.setPosition(60);
+
+        while(decided == false) {
+            int color = jkcolor.alpha();
+            if(color == 10) {
+                DriveFor(0.5, 0.0, 1.0);
+                jknock.setPosition(1.2);
+                DriveFor(0.5, 0.0, -1.0);
+                decided = true;
+            }
+            else if(color == 50) {
+                DriveFor(0.5, 0.0, -1.0);
+                jknock.setPosition(1.2);
+                DriveFor(0.5, 0.0, 1.0);
+                decided = true;
+            }
+            else {
+                if(runtime.seconds() >= 1) {
+                    jknock.setPosition(1.2);
+                    decided = true;
+                }
+            }
+
+        }
+        jkcolor.enableLed(false);
+    }
+
+    public int Vuforia(int cameraMonitorViewId) {
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        parameters.vuforiaLicenseKey = "AUBrQCz/////AAAAGXg5njs2FEpBgEGX/o6QppZq8c+tG+wbAB+cjpPcC5bwtGmv+kD1lqGbNrlHctdvrdmTJ9Fm1OseZYM15VBaiF++ICnjCSY/IHPhjGW9TXDMAOv/Pdz/T5H86PduPVVKvdGiQ/gpE8v6HePezWRRWG6CTA21itPZfj0xDuHdqrAGGiIQXcUbCTfRAkY7HwwRfQOM1aDhmeAaOvkPPCnaA228iposAByBHmA2rkx4/SmTtN82rtOoRn3/I1PA9RxMiWHWlU67yMQW4ExpTe2eRtq7fPGCCjFeXqOl57au/rZySASURemt7pwbprumwoyqYLgK9eJ6hC2UqkJO5GFzTi3XiDNOYcaFOkP71P5NE/BB    ";
+
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+
+        VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        VuforiaTrackable relicTemplate = relicTrackables.get(0);
+        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
+
+        relicTrackables.activate();
+
+        int choosen = 0;
+
+        while (choosen == 0) {
+
+            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                switch(vuMark) {
+                    case LEFT:
+                        choosen = 1;
+                        break;
+                    case CENTER:
+                        choosen = 2;
+                        break;
+                    case RIGHT:
+                        choosen = 3;
+                        break;
+                }
+            }
+        }
+        return choosen;
     }
 
 }

@@ -140,15 +140,20 @@ public class OmniBot_Iterative extends OpMode{
         if(d_down1 == true) {
             robot.onmiDrive(0.0, 0.4, 0.0);
         }
-        if(d_up1 == true) {
+        else if(d_up1 == true) {
             robot.onmiDrive(0.0, -0.4, 0.0);
         }
-        if(d_left1 == true) {
+        else if(d_left1 == true) {
             robot.onmiDrive(-0.4, 0.0, 0.0);
         }
-        if(d_right1 == true) {
+        else if(d_right1 == true) {
             robot.onmiDrive(0.4, 0.0, 0.0);
         }
+        else {
+            robot.onmiDrive(left_stick_x, left_stick_y, right_stick_x);
+        }
+
+
 
         if (left_bumper == true) {
             robot.grabber.setTargetPosition(1437);
@@ -202,7 +207,6 @@ public class OmniBot_Iterative extends OpMode{
 
         //robot.relicLifter(dup,ddown,dleft,dright);
 
-        robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
         //robot.grabber.setPosition(0.0);
         // Send telemetry message to signify robot running;
 

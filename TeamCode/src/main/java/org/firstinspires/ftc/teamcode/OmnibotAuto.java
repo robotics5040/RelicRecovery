@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
@@ -61,7 +62,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 public class OmnibotAuto extends LinearOpMode {
 
     HardwareOmniRobot  robot   = new HardwareOmniRobot();
-    VuforiaLocalizer vuforia;
 
     @Override public void runOpMode() {
         robot.init(hardwareMap);
@@ -69,53 +69,18 @@ public class OmnibotAuto extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
 
-        //Vuforia Stuff
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
-        parameters.vuforiaLicenseKey = "AUBrQCz/////AAAAGXg5njs2FEpBgEGX/o6QppZq8c+tG+wbAB+cjpPcC5bwtGmv+kD1lqGbNrlHctdvrdmTJ9Fm1OseZYM15VBaiF++ICnjCSY/IHPhjGW9TXDMAOv/Pdz/T5H86PduPVVKvdGiQ/gpE8v6HePezWRRWG6CTA21itPZfj0xDuHdqrAGGiIQXcUbCTfRAkY7HwwRfQOM1aDhmeAaOvkPPCnaA228iposAByBHmA2rkx4/SmTtN82rtOoRn3/I1PA9RxMiWHWlU67yMQW4ExpTe2eRtq7fPGCCjFeXqOl57au/rZySASURemt7pwbprumwoyqYLgK9eJ6hC2UqkJO5GFzTi3XiDNOYcaFOkP71P5NE/BB    ";
-
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
-
-        telemetry.addData(">", "Press Play to start");
-        telemetry.update();
         waitForStart();
 
-        relicTrackables.activate();
+        //Vuforia Stuff
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int choosen = robot.Vuforia(cameraMonitorViewId);
+        telemetry.addData("VuMark", "%s visible", choosen);
+        telemetry.update();
 
-        int choosen = 0;
+        robot.JewelKnock();
 
-        while (choosen == 0) {
-
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                switch(vuMark) {
-                    case LEFT:
-                        choosen = 1;
-                        telemetry.addData("VuMark", "%s visible", choosen);
-                        break;
-                    case CENTER:
-                        choosen = 2;
-                        telemetry.addData("VuMark", "%s visible", choosen);
-                        break;
-                    case RIGHT:
-                        choosen = 3;
-                        telemetry.addData("VuMark", "%s visible", choosen);
-                        break;
-                }
-            }
-            else {
-                telemetry.addData("VuMark", "not visible");
-            }
-
-            telemetry.update();
-        }
-        robot.DriveFor(1.2, 1.0);
+        robot.DriveFor(1.2, 1.0, 0.0);
+        robot.DriveFor(5.0, 0.0, 0.0);
         robot.grabber.setTargetPosition(0);
     }
 }
