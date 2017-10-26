@@ -77,9 +77,16 @@ public class OmnibotAuto extends LinearOpMode {
         telemetry.addData("VuMark", "%s visible", choosen);
         telemetry.update();
 
-        robot.JewelKnock();
+        robot.jknock.setPosition(0.45);
+        robot.DriveFor(2.0, 0.0, 0.0);
+        robot.jkcolor.enableLed(true);
+        telemetry.addData("Color Sensor", robot.jkcolor.blue());
+        telemetry.update();
+        robot.JewelKnock(robot.jkcolor.blue());
+        robot.DriveFor(2.0, 0.0, 0.0);
         robot.DriveFor(1.2, 1.0, 0.0);
         robot.DriveFor(5.0, 0.0, 0.0);
         robot.grabber.setTargetPosition(0);
+        robot.DriveFor(1.0, 0.0, 0.0);
     }
 }

@@ -32,6 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -98,7 +100,7 @@ public class OmniBot_Iterative extends OpMode{
     @Override
     public void loop() {
         double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX;
-        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,d_up1,d_down1,d_left1,d_right1;
+        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1;
 
 
 
@@ -127,6 +129,7 @@ public class OmniBot_Iterative extends OpMode{
         dleft = gamepad2.dpad_left;
         dright = gamepad2.dpad_right;
         left_bump1 = gamepad1.left_bumper;
+        right_bump1 = gamepad1.right_bumper;
         d_down1 = gamepad1.dpad_down;
         d_up1 = gamepad1.dpad_up;
         d_left1 = gamepad1.dpad_left;
@@ -139,16 +142,16 @@ public class OmniBot_Iterative extends OpMode{
 
         //slight adjustments for driver
         if(d_down1 == true) {
-            robot.onmiDrive(0.0, 0.4, 0.0);
+            robot.onmiDrive(0.0, 0.6, 0.0);
         }
         else if(d_up1 == true) {
-            robot.onmiDrive(0.0, -0.4, 0.0);
+            robot.onmiDrive(0.0, -0.6, 0.0);
         }
         else if(d_left1 == true) {
-            robot.onmiDrive(-0.4, 0.0, 0.0);
+            robot.onmiDrive(-0.6, 0.0, 0.0);
         }
         else if(d_right1 == true) {
-            robot.onmiDrive(0.4, 0.0, 0.0);
+            robot.onmiDrive(0.6, 0.0, 0.0);
         }
         else {
             robot.onmiDrive(left_stick_x, left_stick_y, right_stick_x);
@@ -157,7 +160,7 @@ public class OmniBot_Iterative extends OpMode{
 
 
         if (left_bumper == true) {
-            robot.grabber.setTargetPosition(1437);
+            robot.grabber.setTargetPosition(1485);
 
         }
         else {
@@ -165,6 +168,9 @@ public class OmniBot_Iterative extends OpMode{
         }
         if(left_bump1 == true) {
             robot.wheelie.setPower(-1.0);
+        }
+        else if(right_bump1){
+            robot.wheelie.setPower(1.0);
         }
         else {
             robot.wheelie.setPower(0.0);
@@ -184,8 +190,8 @@ public class OmniBot_Iterative extends OpMode{
             robot.claw2.setPosition(.0);
         }
         else if (x_button == true) {
-            robot.claw1.setPosition(0.75);
-            robot.claw2.setPosition(0.25);
+            robot.claw1.setPosition(0.70);
+            robot.claw2.setPosition(0.30);
         }
         else if(y_button == true) {
             robot.claw1.setPosition(0.60);
@@ -223,6 +229,12 @@ public class OmniBot_Iterative extends OpMode{
         telemetry.addData("Y Button: ", y_button);
         telemetry.addData("2nd Left Trigger",LX);
         telemetry.addData("2nd Right Trigger",RX);
+        telemetry.addData("Color Sensor Blue", robot.jkcolor.blue());
+        telemetry.addData("Color Sensor Red", robot.jkcolor.red());
+        telemetry.addData("Color Sensor Green", robot.jkcolor.green());
+        telemetry.addData("Color Sensor Alpha", robot.jkcolor.alpha());
+        telemetry.addData("Color Sensor ARGB", robot.jkcolor.argb());
+        telemetry.addData("Color Sensor Hashcode", robot.jkcolor.hashCode());
         telemetry.addLine("What is my name?: 474675627377");
 
     }

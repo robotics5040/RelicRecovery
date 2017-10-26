@@ -23,6 +23,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
@@ -103,7 +104,7 @@ public class HardwareOmniRobot
         //grabber = hwMap.servo.get("grabber");
         claw2 = hwMap.servo.get("claw_2");
         jknock = hwMap.servo.get("jknock");
-        jkcolor = hwMap.colorSensor.get("color_sense");
+        jkcolor = hwMap.get(ColorSensor.class, "color_sense");
         odsfront = hwMap.opticalDistanceSensor.get("ODSFront");
         odsback = hwMap.opticalDistanceSensor.get("ODSBack");
         odsleft1 = hwMap.opticalDistanceSensor.get("ODSLeft2");
@@ -129,13 +130,13 @@ public class HardwareOmniRobot
             slide.setPower(0);
             reel.setPower(0);
             jknock.setPosition(1.2);
-            claw1.setPosition(.75);
-            claw2.setPosition(.25);
+            claw1.setPosition(.60);
+            claw2.setPosition(.35);
             //grabber.scaleRange(0.0, 0.25);
             //grabber.setPosition(0.220);
             
             grabber.setPower(0.75);
-            grabber.setTargetPosition(1430);
+            grabber.setTargetPosition(1485);
 
         dumper.setPosition(0);
 
@@ -254,33 +255,31 @@ public class HardwareOmniRobot
         onmiDrive(0.0, 0.0, 0.0); //stops  moving after
     }
 
-    public void JewelKnock() {
+    public void JewelKnock(int color) {
 
         boolean decided = false;
         runtime.reset();
         jkcolor.enableLed(true);
-        jknock.setPosition(60);
 
         while(decided == false) {
-            int color = jkcolor.alpha();
-            if(color == 10) {
-                DriveFor(0.5, 0.0, 1.0);
+            if(color > 2) {
+                DriveFor(0.3, 0.0, -0.5);
                 jknock.setPosition(1.2);
-                DriveFor(0.5, 0.0, -1.0);
-                decided = true;
-            }
-            else if(color == 50) {
-                DriveFor(0.5, 0.0, -1.0);
-                jknock.setPosition(1.2);
-                DriveFor(0.5, 0.0, 1.0);
+                DriveFor(0.3, 0.0, 0.5);
                 decided = true;
             }
             else {
+                DriveFor(0.3, 0.0, 0.5);
+                jknock.setPosition(1.2);
+                DriveFor(0.3, 0.0, -0.5);
+                decided = true;
+            }
+            /*else {
                 if(runtime.seconds() >= 1) {
                     jknock.setPosition(1.2);
                     decided = true;
                 }
-            }
+            }*/
         }
         jkcolor.enableLed(false);
     }
