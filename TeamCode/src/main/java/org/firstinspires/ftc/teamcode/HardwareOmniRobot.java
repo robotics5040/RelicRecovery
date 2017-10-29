@@ -255,7 +255,7 @@ public class HardwareOmniRobot
         onmiDrive(0.0, 0.0, 0.0); //stops  moving after
     }
 
-    public void JewelKnock(int color) {
+    public void JewelKnock(int color, String side) {
 
         boolean decided = false;
         runtime.reset();
@@ -263,16 +263,34 @@ public class HardwareOmniRobot
 
         while(decided == false) {
             if(color > 2) {
-                DriveFor(0.3, 0.0, -0.5);
-                jknock.setPosition(1.2);
-                DriveFor(0.3, 0.0, 0.5);
-                decided = true;
+                if (side == "blue") {
+                    DriveFor(0.3, 0.0, -0.5);
+                    jknock.setPosition(1.2);
+                    DriveFor(0.3, 0.0, 0.5);
+                    decided = true;
+
+                }
+                else if (side == "red") {
+                    DriveFor(0.3, 0.0, 0.5);
+                    jknock.setPosition(1.2);
+                    DriveFor(0.3, 0.0, -0.5);
+                    decided = true;
+                }
+
             }
             else {
-                DriveFor(0.3, 0.0, 0.5);
-                jknock.setPosition(1.2);
-                DriveFor(0.3, 0.0, -0.5);
-                decided = true;
+                if (side == "red") {
+                    DriveFor(0.3, 0.0, -0.5);
+                    jknock.setPosition(1.2);
+                    DriveFor(0.3, 0.0, 0.5);
+                    decided = true;
+                }
+                else if (side == "blue") {
+                    DriveFor(0.3, 0.0, 0.5);
+                    jknock.setPosition(1.2);
+                    DriveFor(0.3, 0.0, -0.5);
+                    decided = true;
+                }
             }
             /*else {
                 if(runtime.seconds() >= 1) {

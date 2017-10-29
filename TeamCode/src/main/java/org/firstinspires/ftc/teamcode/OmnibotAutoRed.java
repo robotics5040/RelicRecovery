@@ -34,13 +34,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -57,9 +50,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Omnibot: Autotest", group="Omnibot")
+@Autonomous(name="Omnibot: AutotestRed", group="Omnibot")
 //@Disabled
-public class OmnibotAuto extends LinearOpMode {
+public class OmnibotAutoRed extends LinearOpMode {
 
     HardwareOmniRobot  robot   = new HardwareOmniRobot();
 
@@ -84,7 +77,7 @@ public class OmnibotAuto extends LinearOpMode {
         telemetry.update();
         robot.JewelKnock(robot.jkcolor.blue(),"red");
         robot.DriveFor(2.0, 0.0, 0.0);
-        robot.DriveFor(1.2, 1.0, 0.0);
+        robot.DriveFor(1.2, -1.0, 0.0);
         robot.DriveFor(5.0, 0.0, 0.0);
         robot.grabber.setTargetPosition(0);
         robot.DriveFor(1.0, 0.0, 0.0);
