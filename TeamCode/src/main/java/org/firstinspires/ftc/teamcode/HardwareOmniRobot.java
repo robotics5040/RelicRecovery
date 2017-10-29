@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.kauailabs.navx.ftc.AHRS;
+import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -23,9 +24,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.I2cAddr;
+
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+
+import java.text.DecimalFormat;
 
 /**
  * This is NOT an opmode.
@@ -44,6 +47,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
  */
 public class HardwareOmniRobot
 {
+    private navXPIDController yawPIDController;
+    private navXPIDController.PIDResult yawPIDResult;
     ElapsedTime runtime = new ElapsedTime();
 
     ColorSensor jkcolor;
@@ -130,13 +135,13 @@ public class HardwareOmniRobot
             slide.setPower(0);
             reel.setPower(0);
             jknock.setPosition(1.2);
-            claw1.setPosition(.60);
-            claw2.setPosition(.35);
+            claw1.setPosition(.70);
+            claw2.setPosition(.30);
             //grabber.scaleRange(0.0, 0.25);
             //grabber.setPosition(0.220);
             
             grabber.setPower(0.75);
-            grabber.setTargetPosition(1485);
+            grabber.setTargetPosition(1500);
 
         dumper.setPosition(0);
 
@@ -234,10 +239,10 @@ public class HardwareOmniRobot
 
 
         try {
-            leftMotor1.setPower(limit(((forward - sideways)/2) * 1 + (-.314 * rotation)));
-            leftMotor2.setPower(limit(((forward + sideways)/2) * 1 + (-.314 * rotation)));
-            rightMotor1.setPower(limit(((-forward - sideways)/2) * 1 + (-.314 * rotation)));
-            rightMotor2.setPower(limit(((-forward + sideways)/2) * 1 + (-.314 * rotation)));
+            leftMotor1.setPower(limit(((forward - sideways)/2) * 1 + (-.25 * rotation)));
+            leftMotor2.setPower(limit(((forward + sideways)/2) * 1 + (-.25 * rotation)));
+            rightMotor1.setPower(limit(((-forward - sideways)/2) * 1 + (-.25 * rotation)));
+            rightMotor2.setPower(limit(((-forward + sideways)/2) * 1 + (-.25 * rotation)));
         } catch (Exception e) {
             RobotLog.ee(MESSAGETAG, e.getStackTrace().toString());
         }
@@ -292,14 +297,35 @@ public class HardwareOmniRobot
                     decided = true;
                 }
             }
-            /*else {
-                if(runtime.seconds() >= 1) {
-                    jknock.setPosition(1.2);
-                    decided = true;
-                }
-            }*/
         }
         jkcolor.enableLed(false);
+    }
+    public void NavXInit(double TARGET_ANGLE_DEGREES) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        yawPIDController = new navXPIDController( navx_device, navXPIDController.navXTimestampedDataSource.YAW);
+
+        yawPIDController.setSetpoint(TARGET_ANGLE_DEGREES);
+        yawPIDController.setContinuous(true);
+        yawPIDController.setOutputRange(MIN_MOTOR_OUTPUT_VALUE, MAX_MOTOR_OUTPUT_VALUE);
+        yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, 1.0);
+        yawPIDController.setPID(0.010, 0.0, 0.0);
+        yawPIDController.enable(true);
+
+        navx_device.zeroYaw();
+    }
+    public void NavX(double forward, double side) {
+        //setting up variables that the navX uses
+        //navXPIDController yawPIDController;
+        yawPIDResult = new navXPIDController.PIDResult();
+
+        if (yawPIDController.isNewUpdateAvailable(yawPIDResult)) {
+            if (yawPIDResult.isOnTarget()) {
+                onmiDrive(side,-forward,0);
+            } else {
+                double output = yawPIDResult.getOutput();
+                onmiDrive(side,-forward,output);
+            }
+        }
     }
 
     public int Vuforia(int cameraMonitorViewId) {
