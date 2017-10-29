@@ -51,7 +51,7 @@ public class HardwareOmniRobot
     OpticalDistanceSensor odsback;
     OpticalDistanceSensor odsleft1;
     OpticalDistanceSensor odsleft2;
-
+    //change
     /* Public OpMode members. */
     public DcMotor leftMotor1 = null;
     public DcMotor leftMotor2 = null;
