@@ -79,6 +79,13 @@ public class HardwareOmniRobot
     private final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
     public AHRS navx_device;
 
+    /* start FLEX SENSOR instance fields */
+    private int columnNum = 0;
+    private double flexCurrent;
+    private double flexPrevious = 0;
+    private final double TOLERANCE = 0.30;
+    /* end FLEX SENSOR instance fields */
+
     /* local OpMode members. */
     HardwareMap hwMap;
     private ElapsedTime period  = new ElapsedTime();
@@ -114,6 +121,8 @@ public class HardwareOmniRobot
         odsback = hwMap.opticalDistanceSensor.get("ODSBack");
         odsleft1 = hwMap.opticalDistanceSensor.get("ODSLeft2");
         odsleft2 = hwMap.opticalDistanceSensor.get("ODSLeft1");
+
+        flex = hwMap.analogInput.get("flx");
 
         reel.setDirection(DcMotor.Direction.FORWARD);
         slide.setDirection(DcMotor.Direction.REVERSE);
@@ -326,6 +335,18 @@ public class HardwareOmniRobot
                 onmiDrive(side,-forward,output);
             }
         }
+    }
+
+    public int getColumnNum(){
+
+
+        flexCurrent = flex.getVoltage();
+
+        if (flexPrevious - TOLERANCE > flexCurrent) {
+            columnNum++;
+        }
+        flexPrevious = flexCurrent;
+        return columnNum;
     }
 
     public int Vuforia(int cameraMonitorViewId) {
