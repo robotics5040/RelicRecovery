@@ -66,6 +66,8 @@ public class HardwareOmniRobot
     public Servo claw2 = null;
     public DcMotor reel = null;
     public DcMotor slide = null;
+    public Servo wrist = null;
+    public Servo clamp = null;
     private final double MIN_MOTOR_OUTPUT_VALUE = -1.0;
     private final double MAX_MOTOR_OUTPUT_VALUE = 1.0;
 
@@ -109,7 +111,9 @@ public class HardwareOmniRobot
         odsback = hwMap.opticalDistanceSensor.get("ODSBack");
         odsleft1 = hwMap.opticalDistanceSensor.get("ODSLeft2");
         odsleft2 = hwMap.opticalDistanceSensor.get("ODSLeft1");
-
+        clamp = hwMap.servo.get("clamp");
+        wrist = hwMap.servo.get("wrist");
+        wheelie = hwMap.dcMotor.get("wheelie");
         reel.setDirection(DcMotor.Direction.FORWARD);
         slide.setDirection(DcMotor.Direction.REVERSE);
         leftMotor1.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
@@ -132,7 +136,8 @@ public class HardwareOmniRobot
             jknock.setPosition(1.2);
             claw1.setPosition(.60);
             claw2.setPosition(.35);
-            //grabber.scaleRange(0.0, 0.25);
+        wrist.setPosition(0);
+        //grabber.scaleRange(0.0, 0.25);
             //grabber.setPosition(0.220);
             
             grabber.setPower(0.75);
@@ -161,6 +166,7 @@ public class HardwareOmniRobot
             RobotLog.ee(MESSAGETAG,e.getMessage());
 
         }*/
+
     }
 
 

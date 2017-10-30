@@ -56,8 +56,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //@Disabled
 public class OmniBot_Iterative extends OpMode{
     private double position = 0.0;
+        public int  pressed = 0;
+        double wrist_num = 0;
 
-    public int  pressed = 0;
     /* Declare OpMode members. */
     private HardwareOmniRobot robot; // use the class created to define a Pushbot's hardware
 
@@ -100,7 +101,7 @@ public class OmniBot_Iterative extends OpMode{
     @Override
     public void loop() {
         double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX;
-        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1;
+        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1,stick_press;
 
 
 
@@ -117,8 +118,8 @@ public class OmniBot_Iterative extends OpMode{
         right_bumper = gamepad2.right_bumper;
         left_trigger = gamepad1.left_trigger;
         right_trigger = gamepad1.right_trigger;
-        a_button = gamepad1.a;
-        b_button = gamepad1.b;
+        a_button = gamepad2.a;
+        b_button = gamepad2.b;
         x_button = gamepad2.x;
         y_button = gamepad2.y;
         //b_button2 = gamepad2.b;
@@ -134,7 +135,7 @@ public class OmniBot_Iterative extends OpMode{
         d_up1 = gamepad1.dpad_up;
         d_left1 = gamepad1.dpad_left;
         d_right1 = gamepad1.dpad_right;
-
+        stick_press = gamepad2.left_stick_button;
         //robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
 
 
@@ -166,6 +167,7 @@ public class OmniBot_Iterative extends OpMode{
         else {
             robot.grabber.setTargetPosition(0);
         }
+        //wheelie controlls
         if(left_bump1 == true) {
             robot.wheelie.setPower(-1.0);
         }
@@ -176,6 +178,7 @@ public class OmniBot_Iterative extends OpMode{
             robot.wheelie.setPower(0.0);
         }
 
+        //dumper controlls
         if (right_bumper == true) {
             robot.dumper.setPosition(.5);
 
@@ -184,7 +187,7 @@ public class OmniBot_Iterative extends OpMode{
             robot.dumper.setPosition(0);
         }
 
-
+        //claw controlls
         if ((x_button == true)&& (left_bumper == false) ) {
             robot.claw1.setPosition(1);
             robot.claw2.setPosition(.0);
@@ -201,6 +204,46 @@ public class OmniBot_Iterative extends OpMode{
             robot.claw1.setPosition(0.35);
             robot.claw2.setPosition(0.5);
         }
+        //reel controlls
+        if (dup == true) {
+            robot.reel.setPower(1);
+        }
+        else if (ddown == true) {
+            robot.reel.setPower(-1);
+        }
+        else {
+            robot.reel.setPower(0);
+        }
+        //slide controlls
+        if(dleft == true) {
+            robot.slide.setPower(1);
+        }
+        else  if (dright == true) {
+            robot.slide.setPower(- 1);
+        }
+        else {
+            robot.slide.setPower(0);
+
+        }
+
+        if(stick_press==true) {
+            robot.clamp.setPosition(0.7);
+        }
+        else {
+
+            robot.clamp.setPosition(0);
+        }
+        if (a_button == true) {
+            //robot.wrist.setPosition((robot.wrist.getPosition()-0.1));
+        }
+        if(a_button==true) {
+            wrist_num = wrist_num +  0.02;
+
+        }
+        if (b_button==true) {
+            wrist_num = wrist_num-0.02;
+        }
+        robot.wrist.setPosition(wrist_num);
         /*if (b_button2 == true) {
             robot.grabber.setPower(-0.1);
 
