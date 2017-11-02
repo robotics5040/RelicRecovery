@@ -56,8 +56,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //@Disabled
 public class OmniBot_Iterative extends OpMode{
     private double position = 0.0;
-        public int  pressed = 0;
-        double wrist_num = 0;
+    double wrist_num = 0;
+    public int  pressed = 0;
+
 
     /* Declare OpMode members. */
     private HardwareOmniRobot robot; // use the class created to define a Pushbot's hardware
@@ -93,6 +94,7 @@ public class OmniBot_Iterative extends OpMode{
      */
     @Override
     public void start() {
+
     }
 
     /*
@@ -101,7 +103,7 @@ public class OmniBot_Iterative extends OpMode{
     @Override
     public void loop() {
         double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX;
-        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1,stick_press;
+        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1,stick_press, stick_press1;
 
 
 
@@ -135,7 +137,8 @@ public class OmniBot_Iterative extends OpMode{
         d_up1 = gamepad1.dpad_up;
         d_left1 = gamepad1.dpad_left;
         d_right1 = gamepad1.dpad_right;
-        stick_press = gamepad2.left_stick_button;
+        stick_press = gamepad2.right_stick_button;
+        stick_press1 = gamepad2.left_stick_button;
         //robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
 
 
@@ -206,44 +209,48 @@ public class OmniBot_Iterative extends OpMode{
         }
         //reel controlls
         if (dup == true) {
-            robot.reel.setPower(1);
+            robot.reel.setPower(.75);
         }
         else if (ddown == true) {
-            robot.reel.setPower(-1);
+            robot.reel.setPower(-.2);
         }
         else {
             robot.reel.setPower(0);
         }
         //slide controlls
         if(dleft == true) {
-            robot.slide.setPower(1);
+            robot.slide.setPower(.5);
         }
         else  if (dright == true) {
-            robot.slide.setPower(- 1);
+            robot.slide.setPower(-.5);
         }
         else {
-            robot.slide.setPower(0);
+            robot.slide.setPower(-.02);
 
         }
 
-        if(stick_press==true) {
-            robot.clamp.setPosition(0.7);
+        if(stick_press==true || stick_press1 == true) {
+            robot.clamp.setPosition(0.55);
         }
         else {
 
-            robot.clamp.setPosition(0);
+            robot.clamp.setPosition(0.1);
         }
         if (a_button == true) {
             //robot.wrist.setPosition((robot.wrist.getPosition()-0.1));
         }
-        if(a_button==true) {
-            wrist_num = wrist_num +  0.02;
+        if(a_button==true && wrist_num >= 0 ) {
+            wrist_num = wrist_num -  0.01;
+            robot.wrist.setPosition(wrist_num);
+        }
+        else    if (b_button==true && wrist_num <=2) {
+            wrist_num = wrist_num+0.01;
+            robot.wrist.setPosition(wrist_num);
+        }
+        else {
+            robot.wrist.setPosition(wrist_num);
+        }
 
-        }
-        if (b_button==true) {
-            wrist_num = wrist_num-0.02;
-        }
-        robot.wrist.setPosition(wrist_num);
         /*if (b_button2 == true) {
             robot.grabber.setPower(-0.1);
 
@@ -272,6 +279,7 @@ public class OmniBot_Iterative extends OpMode{
         telemetry.addData("Y Button: ", y_button);
         telemetry.addData("2nd Left Trigger",LX);
         telemetry.addData("2nd Right Trigger",RX);
+        telemetry.addData("Wrist Position: ",wrist_num);
         telemetry.addData("Color Sensor Blue", robot.jkcolor.blue());
         telemetry.addData("Color Sensor Red", robot.jkcolor.red());
         telemetry.addData("Color Sensor Green", robot.jkcolor.green());
