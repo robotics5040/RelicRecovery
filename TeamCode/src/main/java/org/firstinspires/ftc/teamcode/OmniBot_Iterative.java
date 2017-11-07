@@ -36,6 +36,9 @@ import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -56,10 +59,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //@Disabled
 public class OmniBot_Iterative extends OpMode{
     private double position = 0.0;
-    double wrist_num = 0;
-    public int  pressed = 0;
-
-
+        public int  pressed = 0;
+        double wrist_num = 0;
+        boolean closed = true;
+        ElapsedTime runtime = new ElapsedTime();
     /* Declare OpMode members. */
     private HardwareOmniRobot robot; // use the class created to define a Pushbot's hardware
 
@@ -94,7 +97,6 @@ public class OmniBot_Iterative extends OpMode{
      */
     @Override
     public void start() {
-
     }
 
     /*
@@ -118,7 +120,7 @@ public class OmniBot_Iterative extends OpMode{
 
         left_bumper = gamepad2.left_bumper;
         right_bumper = gamepad2.right_bumper;
-        left_trigger = gamepad1.left_trigger;
+        left_trigger = gamepad2.left_trigger;
         right_trigger = gamepad1.right_trigger;
         a_button = gamepad2.a;
         b_button = gamepad2.b;
@@ -144,28 +146,32 @@ public class OmniBot_Iterative extends OpMode{
 
         robot.grabber.setPower(1);
 
+        //hold glyph halfway up
+
         //slight adjustments for driver
         if(d_down1 == true) {
-            robot.onmiDrive(0.0, 0.6, 0.0);
+            left_stick_y = 0.4;
         }
-        else if(d_up1 == true) {
-            robot.onmiDrive(0.0, -0.6, 0.0);
+        if(d_up1 == true) {
+            left_stick_y = -0.4;
         }
-        else if(d_left1 == true) {
-            robot.onmiDrive(-0.6, 0.0, 0.0);
+        if(d_left1 == true) {
+            left_stick_x = -0.4;
         }
-        else if(d_right1 == true) {
-            robot.onmiDrive(0.6, 0.0, 0.0);
-        }
-        else {
-            robot.onmiDrive(left_stick_x, left_stick_y, right_stick_x);
+        if(d_right1 == true) {
+            left_stick_x = 0.4;
         }
 
 
+        robot.onmiDrive(left_stick_x, left_stick_y, right_stick_x);
 
+        //grabber position
         if (left_bumper == true) {
-            robot.grabber.setTargetPosition(1485);
+            robot.grabber.setTargetPosition(1550);
 
+        }
+        else if(left_trigger > 0.2) {
+            robot.grabber.setTargetPosition(1000);
         }
         else {
             robot.grabber.setTargetPosition(0);
@@ -184,28 +190,26 @@ public class OmniBot_Iterative extends OpMode{
         //dumper controlls
         if (right_bumper == true) {
             robot.dumper.setPosition(.5);
-
         }
         else {
             robot.dumper.setPosition(0);
         }
 
         //claw controlls
-        if ((x_button == true)&& (left_bumper == false) ) {
-            robot.claw1.setPosition(1);
-            robot.claw2.setPosition(.0);
+        //closes claws
+        if (x_button == true) {
+            robot.claw1.setPosition(0.3);
+            robot.claw2.setPosition(0.7);
         }
-        else if (x_button == true) {
-            robot.claw1.setPosition(0.70);
-            robot.claw2.setPosition(0.30);
-        }
+        //all the way open
         else if(y_button == true) {
-            robot.claw1.setPosition(0.60);
-            robot.claw2.setPosition(0.35);
+            robot.claw1.setPosition(0.8);
+            robot.claw2.setPosition(0.2);
         }
+        //part way open when not pressing a button
         else {
-            robot.claw1.setPosition(0.35);
-            robot.claw2.setPosition(0.5);
+            robot.claw1.setPosition(0.5);
+            robot.claw2.setPosition(0.45);
         }
         //reel controlls
         if (dup == true) {
@@ -229,16 +233,18 @@ public class OmniBot_Iterative extends OpMode{
 
         }
 
-        if(stick_press==true || stick_press1 == true) {
-            robot.clamp.setPosition(0.55);
-        }
-        else {
 
+        if((stick_press==true || stick_press1 == true) && closed == false && (runtime.seconds() > .5)){
+            robot.clamp.setPosition(0.55);
+            closed = true;
+            runtime.reset();
+        }
+        else if((stick_press==true || stick_press1==true)&& closed==true && (runtime.seconds() > 0.5)){
             robot.clamp.setPosition(0.1);
         }
-        if (a_button == true) {
+        //if (a_button == true) {
             //robot.wrist.setPosition((robot.wrist.getPosition()-0.1));
-        }
+        //}
         if(a_button==true && wrist_num >= 0 ) {
             wrist_num = wrist_num -  0.01;
             robot.wrist.setPosition(wrist_num);
@@ -282,11 +288,13 @@ public class OmniBot_Iterative extends OpMode{
         telemetry.addData("Wrist Position: ",wrist_num);
         telemetry.addData("Color Sensor Blue", robot.jkcolor.blue());
         telemetry.addData("Color Sensor Red", robot.jkcolor.red());
-        telemetry.addData("Color Sensor Green", robot.jkcolor.green());
-        telemetry.addData("Color Sensor Alpha", robot.jkcolor.alpha());
-        telemetry.addData("Color Sensor ARGB", robot.jkcolor.argb());
-        telemetry.addData("Color Sensor Hashcode", robot.jkcolor.hashCode());
-        telemetry.addLine("What is my name?: 474675627377");
+        telemetry.addData("CS Reading Blue", robot.jkcolor2.blue());
+        telemetry.addData("CS Reading Red", robot.jkcolor2.red());
+        //telemetry.addData("Ultra front", robot.ultra_front.getDistance(DistanceUnit.CM));
+        telemetry.addData("Ultra back", robot.ultra_back.getDistance(DistanceUnit.CM));
+        telemetry.addData("Ultra left", robot.ultra_left.getDistance(DistanceUnit.CM));
+        telemetry.addData("Ultra right", robot.ultra_right.getDistance(DistanceUnit.CM));
+        telemetry.addLine("What is my name?: Spitz");
 
     }
 
