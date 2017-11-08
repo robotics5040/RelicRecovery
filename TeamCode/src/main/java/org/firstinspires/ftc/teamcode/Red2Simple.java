@@ -32,6 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -63,6 +64,7 @@ public class Red2Simple extends LinearOpMode {
     @Override public void runOpMode() {
         robot.init(hardwareMap);
         robot.navx_device.zeroYaw();
+        //robot.yawPIDResult = new navXPIDController.PIDResult();
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -76,7 +78,7 @@ public class Red2Simple extends LinearOpMode {
         robot.DriveFor(0.3,0.0,0.0,0.0);
 
         robot.NavXInit(-90);
-        while(runtime.seconds() < 3){robot.NavX(0.0,0.0);}
+        robot.DriveFor(1.8,0.0,0.0,0.5);
 
         robot.grabber.setTargetPosition(0);
         robot.claw1.setPosition(0.3);
@@ -90,16 +92,17 @@ public class Red2Simple extends LinearOpMode {
             telemetry.update();
 
             if(distanceBack >= 58 && distanceBack <= 60) {
-                robot.NavX(0.0,0.0);
+                robot.onmiDrive(0.0,0.0,0.0);
                 dis = true;
             }
             else if(distanceBack < 58) {
-                robot.NavX(0.4,0.0);
+                robot.onmiDrive(0.0,0.4,0.0);
             }
             else {
-                robot.NavX(-0.4,0.0);
+                robot.onmiDrive(0.0,-0.4,0.0);
             }
         }
         while(runtime.seconds() < 28) {robot.jknock.setPosition(0.59);}
+        robot.navx_device.close();
     }
 }

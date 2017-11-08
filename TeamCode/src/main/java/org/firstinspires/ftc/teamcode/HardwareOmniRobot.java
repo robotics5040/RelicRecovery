@@ -41,8 +41,8 @@ import java.text.DecimalFormat;
  */
 public class HardwareOmniRobot
 {
-    private navXPIDController yawPIDController;
-    private navXPIDController.PIDResult yawPIDResult;
+    public navXPIDController yawPIDController;
+    public navXPIDController.PIDResult yawPIDResult;
     ElapsedTime runtime = new ElapsedTime();
 
     ColorSensor jkcolor, jkcolor2;
@@ -339,14 +339,14 @@ public class HardwareOmniRobot
         yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, 1.0);
         yawPIDController.setPID(0.015, 0.0, 0.0);
         yawPIDController.enable(true);
+        yawPIDResult = new navXPIDController.PIDResult();
     }
 
     //Used to move to desired angle while moving or just turning in place
     public void NavX(double forward, double side) {
         //when running it turns to position
-        yawPIDResult = new navXPIDController.PIDResult();
-
-        if (yawPIDController.isNewUpdateAvailable(yawPIDResult)) {
+        //yawPIDResult = new navXPIDController.PIDResult();
+        if (yawPIDController.isNewUpdateAvailable(new navXPIDController.PIDResult())) {
             if (yawPIDResult.isOnTarget()) {
                 onmiDrive(side,-forward,0);
             } else {

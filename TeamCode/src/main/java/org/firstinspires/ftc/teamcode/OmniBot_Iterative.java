@@ -241,6 +241,8 @@ public class OmniBot_Iterative extends OpMode{
         }
         else if((stick_press==true || stick_press1==true)&& closed==true && (runtime.seconds() > 0.5)){
             robot.clamp.setPosition(0.1);
+            closed = false;
+            runtime.reset();
         }
         //if (a_button == true) {
             //robot.wrist.setPosition((robot.wrist.getPosition()-0.1));

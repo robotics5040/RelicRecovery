@@ -32,6 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -63,6 +64,7 @@ public class Red1Simple extends LinearOpMode {
     @Override public void runOpMode() {
         robot.init(hardwareMap);
         robot.navx_device.zeroYaw();
+        //robot.yawPIDResult = new navXPIDController.PIDResult();
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -87,16 +89,17 @@ public class Red1Simple extends LinearOpMode {
             telemetry.update();
 
             if(distanceLeft >= 14 && distanceLeft <= 16) {
-                robot.NavX(0.0,0.0);
+                robot.onmiDrive(0.0,0.0,0.0);
                 dis = true;
             }
             else if(distanceLeft < 14) {
-                robot.NavX(0.0,0.4);
+                robot.onmiDrive(0.4,0.0,0.0);
             }
             else {
-                robot.NavX(0.0,-0.4);
+                robot.onmiDrive(-0.4,0.0,0.0);
             }
         }
         while(runtime.seconds() < 28) {robot.jknock.setPosition(0.59);}
+        robot.navx_device.close();
     }
 }
