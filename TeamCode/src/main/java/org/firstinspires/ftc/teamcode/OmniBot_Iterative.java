@@ -61,7 +61,7 @@ public class OmniBot_Iterative extends OpMode{
     private double position = 0.0;
         public int  pressed = 0;
         double wrist_num = 0;
-        boolean closed = true;
+        boolean aPressed=false,bPressed=false,xPressed=false,yPressed=true,closed = true;
         ElapsedTime runtime = new ElapsedTime();
     /* Declare OpMode members. */
     private HardwareOmniRobot robot; // use the class created to define a Pushbot's hardware
@@ -104,12 +104,8 @@ public class OmniBot_Iterative extends OpMode{
      */
     @Override
     public void loop() {
-        double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX;
-        boolean left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1,stick_press, stick_press1;
-
-
-
-
+        double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX,front=0,side=0;
+        boolean b_button1,a_button1,y_button1,x_button1,left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1,stick_press, stick_press1;
 
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
@@ -126,7 +122,10 @@ public class OmniBot_Iterative extends OpMode{
         b_button = gamepad2.b;
         x_button = gamepad2.x;
         y_button = gamepad2.y;
-        //b_button2 = gamepad2.b;
+        b_button1 = gamepad1.b;
+        a_button1 = gamepad1.a;
+        y_button1 = gamepad1.y;
+        x_button1 = gamepad1.x;
         LX = gamepad2.left_stick_y;
         RX = gamepad2.right_stick_y;
         dup = gamepad2.dpad_up;
@@ -146,7 +145,7 @@ public class OmniBot_Iterative extends OpMode{
 
         robot.grabber.setPower(1);
 
-        //hold glyph halfway up
+
 
         //slight adjustments for driver
         if(d_down1 == true) {
@@ -162,8 +161,45 @@ public class OmniBot_Iterative extends OpMode{
             left_stick_x = 0.4;
         }
 
+        //changes front of robot for driver using a,b,x,y
+        if(a_button1 == true || aPressed == true) {
+            front = left_stick_y * -1;
+            side = left_stick_x * -1;
 
-        robot.onmiDrive(left_stick_x, left_stick_y, right_stick_x);
+            aPressed = true;
+            bPressed = false;
+            xPressed = false;
+            yPressed = false;
+        }
+        if(b_button1 == true || bPressed == true) {
+            front = left_stick_x;
+            side = left_stick_y*-1;
+
+            aPressed = false;
+            bPressed = true;
+            xPressed = false;
+            yPressed = false;
+        }
+        if(x_button1 == true || xPressed == true) {
+            front = left_stick_x*-1;
+            side = left_stick_y;
+
+            aPressed = false;
+            bPressed = false;
+            xPressed = true;
+            yPressed = false;
+        }
+        if(y_button1 == true || yPressed == true) {
+            front = left_stick_y;
+            side = left_stick_x;
+
+            aPressed = false;
+            bPressed = false;
+            xPressed = false;
+            yPressed = true;
+        }
+
+        robot.onmiDrive(side, front, right_stick_x);
 
         //grabber position
         if (left_bumper == true) {
@@ -297,6 +333,10 @@ public class OmniBot_Iterative extends OpMode{
         telemetry.addData("Ultra left", robot.ultra_left.getDistance(DistanceUnit.CM));
         telemetry.addData("Ultra right", robot.ultra_right.getDistance(DistanceUnit.CM));
         telemetry.addLine("What is my name?: Spitz");
+        telemetry.addData("a",aPressed);
+        telemetry.addData("b",bPressed);
+        telemetry.addData("x",xPressed);
+        telemetry.addData("y",yPressed);
 
     }
 
@@ -306,6 +346,7 @@ public class OmniBot_Iterative extends OpMode{
      */
     @Override
     public void stop() {
+        robot.navx_device.close();
     }
 
 }

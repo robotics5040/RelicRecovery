@@ -34,13 +34,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -57,19 +53,23 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Omnibot: Autotest", group="Omnibot")
+@Autonomous(name="Omnibot: Blue2Proto", group="Omnibot")
 //@Disabled
-public class OmnibotAuto extends LinearOpMode {
+public class Blue2Proto extends LinearOpMode {
 
     HardwareOmniRobot  robot   = new HardwareOmniRobot();
+    ElapsedTime runtime = new ElapsedTime();
 
     @Override public void runOpMode() {
         robot.init(hardwareMap);
+        robot.navx_device.zeroYaw();
+        //robot.yawPIDResult = new navXPIDController.PIDResult();
 
-        telemetry.addData("Status", "Ready to run");    //
+        telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
         waitForStart();
+        runtime.reset();
 
         //Vuforia Stuff
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -77,17 +77,38 @@ public class OmnibotAuto extends LinearOpMode {
         telemetry.addData("VuMark", "%s visible", choosen);
         telemetry.update();
 
-        robot.jknock.setPosition(0.45);
-        robot.DriveFor(2.0, 0.0, 0.0, 0.0);
-        robot.jkcolor.enableLed(true);
-        telemetry.addData("Color Sensor", robot.jkcolor.blue());
-        telemetry.update();
-        robot.JewelKnock("red");
-        robot.DriveFor(2.0, 0.0, 0.0, 0.0);
-        robot.DriveFor(1.2, 1.0, 0.0, 0.0);
-        robot.DriveFor(5.0, 0.0, 0.0, 0.0);
+        robot.JewelKnock("blue");
+        robot.DriveFor(0.3,0.0,0.0,0.0);
+        robot.DriveFor(1.2,1.0,0.0,0.0);
+        robot.DriveFor(0.3,0.0,0.0,0.0);
+
+        robot.NavXInit(90);
+        while(runtime.seconds() < 10){robot.NavX(0.0,0.0);}
+        //robot.DriveFor(1.8,0.0,0.0,0.5);
+
         robot.grabber.setTargetPosition(0);
-        robot.DriveFor(1.0, 0.0, 0.0, 0.0);
+        robot.claw1.setPosition(0.3);
+        robot.claw2.setPosition(0.6);
+
+        boolean dis = false;
+        while(dis == false && runtime.seconds() < 26) {
+            double distanceBack = robot.ultra_back.getDistance(DistanceUnit.CM);
+
+            telemetry.addData("Back", distanceBack);
+            telemetry.update();
+
+            if(distanceBack >= 58 && distanceBack <= 60) {
+                robot.onmiDrive(0.0,0.0,0.0);
+                dis = true;
+            }
+            else if(distanceBack < 58) {
+                robot.onmiDrive(0.0,-0.4,0.0);
+            }
+            else {
+                robot.onmiDrive(0.0,0.4,0.0);
+            }
+        }
+        while(runtime.seconds() < 28) {robot.jknock.setPosition(0.59);}
         robot.navx_device.close();
     }
 }
