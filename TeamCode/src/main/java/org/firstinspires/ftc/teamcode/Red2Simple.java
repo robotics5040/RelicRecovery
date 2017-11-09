@@ -74,7 +74,7 @@ public class Red2Simple extends LinearOpMode {
 
         robot.JewelKnock("red");
         robot.DriveFor(0.3,0.0,0.0,0.0);
-        robot.DriveFor(1.2,-1.0,0.0,0.0);
+        robot.DriveFor(1.1,-1.0,0.0,0.0);
         robot.DriveFor(0.3,0.0,0.0,0.0);
 
         robot.NavXInit(-90);
@@ -96,13 +96,13 @@ public class Red2Simple extends LinearOpMode {
                 dis = true;
             }
             else if(distanceBack < 58) {
-                robot.onmiDrive(0.0,0.4,0.0);
-            }
-            else {
                 robot.onmiDrive(0.0,-0.4,0.0);
             }
+            else {
+                robot.onmiDrive(0.0,0.4,0.0);
+            }
         }
-        while(runtime.seconds() < 28) {robot.jknock.setPosition(0.59);}
+        //while(runtime.seconds() < 28) {robot.jknock.setPosition(0.59);}
         robot.navx_device.close();
     }
 }
