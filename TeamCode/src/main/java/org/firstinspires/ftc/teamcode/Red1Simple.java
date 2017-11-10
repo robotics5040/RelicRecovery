@@ -63,8 +63,6 @@ public class Red1Simple extends LinearOpMode {
 
     @Override public void runOpMode() {
         robot.init(hardwareMap);
-        robot.navx_device.zeroYaw();
-        //robot.yawPIDResult = new navXPIDController.PIDResult();
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -81,7 +79,6 @@ public class Red1Simple extends LinearOpMode {
         robot.claw2.setPosition(0.6);
 
         boolean dis = false;
-        robot.NavXInit(0);
         while(dis == false && runtime.seconds() < 26) {
             double distanceLeft = robot.ultra_left.getDistance(DistanceUnit.CM);
 

@@ -63,8 +63,6 @@ public class Blue2Simple extends LinearOpMode {
 
     @Override public void runOpMode() {
         robot.init(hardwareMap);
-        robot.navx_device.zeroYaw();
-        //robot.yawPIDResult = new navXPIDController.PIDResult();
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -77,7 +75,6 @@ public class Blue2Simple extends LinearOpMode {
         robot.DriveFor(1.2,1.0,0.0,0.0);
         robot.DriveFor(0.3,0.0,0.0,0.0);
 
-        robot.NavXInit(90);
         robot.DriveFor(1.8,0.0,0.0,0.5);
 
         robot.grabber.setTargetPosition(0);

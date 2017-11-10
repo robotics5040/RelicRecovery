@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
+import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -97,6 +98,7 @@ public class OmniBot_Iterative extends OpMode{
      */
     @Override
     public void start() {
+        robot.navx_device.zeroYaw();
     }
 
     /*
@@ -105,15 +107,15 @@ public class OmniBot_Iterative extends OpMode{
     @Override
     public void loop() {
         double left_stick_x, left_stick_y,right_stick_x, right_stick_y, power, left_trigger, right_trigger,LX,RX,front=0,side=0;
-        boolean b_button1,a_button1,y_button1,x_button1,left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1,stick_press, stick_press1;
+        boolean NavXTemp, b_button1,a_button1,y_button1,x_button1,left_bumper, right_bumper, a_button, b_button, x_button, y_button,dup,ddown,dleft,dright,left_bump1,right_bump1, d_up1,d_down1,d_left1,d_right1,stick_press, stick_press1;
 
 
-        // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
+        //note: The joystick goes negative when pushed forwards, so negate it)
         left_stick_x = gamepad1.left_stick_x;
         left_stick_y = gamepad1.left_stick_y;
         right_stick_x = gamepad1.right_stick_x;
-        right_stick_y = gamepad1.right_stick_y;
 
+        NavXTemp = gamepad1.left_stick_button;
         left_bumper = gamepad2.left_bumper;
         right_bumper = gamepad2.right_bumper;
         left_trigger = gamepad2.left_trigger;
@@ -140,8 +142,6 @@ public class OmniBot_Iterative extends OpMode{
         d_right1 = gamepad1.dpad_right;
         stick_press = gamepad2.right_stick_button;
         stick_press1 = gamepad2.left_stick_button;
-        //robot.onmiDrive ( left_stick_x, left_stick_y,right_stick_x);
-
 
         robot.grabber.setPower(1);
 
@@ -324,19 +324,20 @@ public class OmniBot_Iterative extends OpMode{
         telemetry.addData("2nd Left Trigger",LX);
         telemetry.addData("2nd Right Trigger",RX);
         telemetry.addData("Wrist Position: ",wrist_num);
-        telemetry.addData("Color Sensor Blue", robot.jkcolor.blue());
-        telemetry.addData("Color Sensor Red", robot.jkcolor.red());
-        telemetry.addData("CS Reading Blue", robot.jkcolor2.blue());
-        telemetry.addData("CS Reading Red", robot.jkcolor2.red());
         //telemetry.addData("Ultra front", robot.ultra_front.getDistance(DistanceUnit.CM));
         telemetry.addData("Ultra back", robot.ultra_back.getDistance(DistanceUnit.CM));
         telemetry.addData("Ultra left", robot.ultra_left.getDistance(DistanceUnit.CM));
         telemetry.addData("Ultra right", robot.ultra_right.getDistance(DistanceUnit.CM));
         telemetry.addLine("What is my name?: Spitz");
-        telemetry.addData("a",aPressed);
-        telemetry.addData("b",bPressed);
-        telemetry.addData("x",xPressed);
-        telemetry.addData("y",yPressed);
+
+        if(NavXTemp == true)
+            robot.navx_device.zeroYaw();
+
+        telemetry.addData("NavX x", robot.navx_device.getRawGyroX());
+        telemetry.addData("NavX z", robot.navx_device.getRawGyroZ());
+        telemetry.addData("NavX y", robot.navx_device.getRawGyroY());
+        telemetry.addData("NavX updating?",robot.yawPIDController.isNewUpdateAvailable(new navXPIDController.PIDResult()));
+        telemetry.addData("NavX updating?2",robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult));
 
     }
 
