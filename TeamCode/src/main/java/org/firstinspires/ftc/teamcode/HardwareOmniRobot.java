@@ -63,10 +63,10 @@ public class HardwareOmniRobot
     // public Servo grabber = null;
     public Servo claw1 = null;
     public Servo claw2 = null;
-    public DcMotor reel = null;
-    public DcMotor slide = null;
-    public Servo wrist = null;
-    public Servo clamp = null;
+    //public DcMotor reel = null;
+    //public DcMotor slide = null;
+    //public Servo wrist = null;
+    //public Servo clamp = null;
     private final double MIN_MOTOR_OUTPUT_VALUE = -1.0;
     private final double MAX_MOTOR_OUTPUT_VALUE = 1.0;
 
@@ -105,15 +105,15 @@ public class HardwareOmniRobot
         rightMotor2 = hwMap.dcMotor.get("right_motor2");
         wheelie = hwMap.dcMotor.get("wheelie");
         grabber = hwMap.dcMotor.get("grabber");
-        slide = hwMap.dcMotor.get("slide");
-        reel = hwMap.dcMotor.get("reel");
+        //slide = hwMap.dcMotor.get("slide");
+        //reel = hwMap.dcMotor.get("reel");
         dumper = hwMap.servo.get("dumper");
         claw1 = hwMap.servo.get("claw_1");
         //grabber = hwMap.servo.get("grabber");
         claw2 = hwMap.servo.get("claw_2");
         jknock = hwMap.servo.get("jknock");
-        wrist = hwMap.servo.get("wrist");
-        clamp = hwMap.servo.get("clamp");
+        //wrist = hwMap.servo.get("wrist");
+        //clamp = hwMap.servo.get("clamp");
         jkcolor = hwMap.get(ColorSensor.class, "color_sense");
         jkcolor2 = hwMap.get(ColorSensor.class, "color");
 
@@ -132,8 +132,8 @@ public class HardwareOmniRobot
 
         flex = hwMap.analogInput.get("flx");
 
-        reel.setDirection(DcMotor.Direction.FORWARD);
-        slide.setDirection(DcMotor.Direction.REVERSE);
+        //reel.setDirection(DcMotor.Direction.FORWARD);
+        //slide.setDirection(DcMotor.Direction.REVERSE);
         leftMotor1.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         leftMotor2.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightMotor1.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
@@ -149,12 +149,12 @@ public class HardwareOmniRobot
         leftMotor2.setPower(0);
         rightMotor2.setPower(0);
         wheelie.setPower(0);
-        slide.setPower(0);
-        reel.setPower(0);
+        //slide.setPower(0);
+        //reel.setPower(0);
         jknock.setPosition(0.7);
         claw1.setPosition(1.0);
         claw2.setPosition(0.0);
-        wrist.setPosition(0);
+        //wrist.setPosition(0);
         //grabber.scaleRange(0.0, 0.25);
         //grabber.setPosition(0.220);
 
@@ -222,7 +222,7 @@ public class HardwareOmniRobot
         return Math.min(Math.max(a, MIN_MOTOR_OUTPUT_VALUE), MAX_MOTOR_OUTPUT_VALUE);
     }
 
-    public void relicLifter(boolean dup, boolean ddown, boolean dleft, boolean dright) {
+    /*public void relicLifter(boolean dup, boolean ddown, boolean dleft, boolean dright) {
         if ((dup == true) && (ddown == false)) {
             slide.setPower(-90);
         }
@@ -245,7 +245,7 @@ public class HardwareOmniRobot
             reel.setPower(-10);
         }
 
-    }
+    }*/
 
 
     public void onmiDrive (double sideways, double forward, double rotation)

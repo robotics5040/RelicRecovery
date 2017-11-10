@@ -248,7 +248,7 @@ public class OmniBot_Iterative extends OpMode{
             robot.claw2.setPosition(0.45);
         }
         //reel controlls
-        if (dup == true) {
+        /*oif (dup == true) {
             robot.reel.setPower(.75);
         }
         else if (ddown == true) {
@@ -293,7 +293,7 @@ public class OmniBot_Iterative extends OpMode{
         }
         else {
             robot.wrist.setPosition(wrist_num);
-        }
+        }*/
 
         /*if (b_button2 == true) {
             robot.grabber.setPower(-0.1);
@@ -336,8 +336,8 @@ public class OmniBot_Iterative extends OpMode{
         telemetry.addData("NavX x", robot.navx_device.getRawGyroX());
         telemetry.addData("NavX z", robot.navx_device.getRawGyroZ());
         telemetry.addData("NavX y", robot.navx_device.getRawGyroY());
-        telemetry.addData("NavX updating?",robot.yawPIDController.isNewUpdateAvailable(new navXPIDController.PIDResult()));
-        telemetry.addData("NavX updating?2",robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult));
+        //telemetry.addData("NavX updating?",robot.yawPIDController.isNewUpdateAvailable(new navXPIDController.PIDResult()));
+        //telemetry.addData("NavX updating?2",robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult));
 
     }
 
