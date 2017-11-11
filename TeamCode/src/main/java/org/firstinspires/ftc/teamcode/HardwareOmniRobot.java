@@ -375,6 +375,7 @@ public class HardwareOmniRobot
 
         int choosen = 0;
 
+
         try {
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -388,41 +389,42 @@ public class HardwareOmniRobot
             relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
             relicTrackables.activate();
-        }catch (Exception e){
-            choosen = 0;
-        }
 
-        while (choosen == 0) {
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                if(side == "red") {
-                    switch (vuMark) {
-                        case LEFT:
-                            choosen = 1;
-                            break;
-                        case CENTER:
-                            choosen = 2;
-                            break;
-                        case RIGHT:
-                            choosen = 3;
-                            break;
+            while (choosen == 0) {
+                RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+                if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                    if(side == "red") {
+                        switch (vuMark) {
+                            case LEFT:
+                                choosen = 1;
+                                break;
+                            case CENTER:
+                                choosen = 2;
+                                break;
+                            case RIGHT:
+                                choosen = 3;
+                                break;
+                        }
                     }
-                }
-                else {
-                    switch (vuMark) {
-                        case LEFT:
-                            choosen = 3;
-                            break;
-                        case CENTER:
-                            choosen = 2;
-                            break;
-                        case RIGHT:
-                            choosen = 1;
-                            break;
+                    else {
+                        switch (vuMark) {
+                            case LEFT:
+                                choosen = 3;
+                                break;
+                            case CENTER:
+                                choosen = 2;
+                                break;
+                            case RIGHT:
+                                choosen = 1;
+                                break;
+                        }
                     }
                 }
             }
+        }catch (Exception e){
+            choosen = 0;
         }
+        
         return choosen;
     }
 }
