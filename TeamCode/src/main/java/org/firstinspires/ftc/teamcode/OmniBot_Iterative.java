@@ -99,6 +99,7 @@ public class OmniBot_Iterative extends OpMode{
     @Override
     public void start() {
         robot.navx_device.zeroYaw();
+        robot.NavXInit(0);
     }
 
     /*
@@ -333,11 +334,11 @@ public class OmniBot_Iterative extends OpMode{
         if(NavXTemp == true)
             robot.navx_device.zeroYaw();
 
-        telemetry.addData("NavX x", robot.navx_device.getRawGyroX());
+        telemetry.addData("NavX compassHeading", robot.navx_device.getCompassHeading());
         telemetry.addData("NavX z", robot.navx_device.getRawGyroZ());
         telemetry.addData("NavX y", robot.navx_device.getRawGyroY());
-        //telemetry.addData("NavX updating?",robot.yawPIDController.isNewUpdateAvailable(new navXPIDController.PIDResult()));
-        //telemetry.addData("NavX updating?2",robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult));
+        telemetry.addData("NavX updating?",robot.yawPIDController.isNewUpdateAvailable(new navXPIDController.PIDResult()));
+        telemetry.addData("NavX updating?2",robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult));
 
     }
 

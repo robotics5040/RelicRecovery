@@ -32,6 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -99,9 +100,23 @@ public class Blue2Proto extends LinearOpMode {
         robot.DriveFor(1.2,1.0,0.0,0.0);
         robot.DriveFor(0.3,0.0,0.0,0.0);
 
+        runtime.reset();
         robot.NavXInit(90);
-        while(runtime.seconds() < 10){robot.NavX(0.0,0.0);}
-        //robot.DriveFor(1.8,0.0,0.0,0.5);
+        while(runtime.seconds() < 3) {
+            telemetry.addData("NavX moving", robot.navx_device.isMoving());
+            telemetry.addData("NavX Updating1?", robot.yawPIDController.isNewUpdateAvailable(new navXPIDController.PIDResult()));
+            telemetry.addData("NavX Updating2?", robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult));
+            telemetry.update();
+            robot.NavX(0.0,0.0);
+        }
+        robot.NavXInit(0);
+        while(runtime.seconds() < 6) {
+            telemetry.addData("NavX moving", robot.navx_device.isMoving());
+            telemetry.addData("NavX Updating1?", robot.yawPIDController.isNewUpdateAvailable(new navXPIDController.PIDResult()));
+            telemetry.addData("NavX Updating2?", robot.yawPIDController.isNewUpdateAvailable(robot.yawPIDResult));
+            telemetry.update();
+            robot.NavX(0.0,0.0);
+        }
 
         robot.grabber.setTargetPosition(0);
         robot.claw1.setPosition(0.3);
