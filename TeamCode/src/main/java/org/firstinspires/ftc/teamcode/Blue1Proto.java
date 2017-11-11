@@ -74,7 +74,23 @@ public class Blue1Proto extends LinearOpMode {
         runtime.reset();
         //Vuforia Stuff
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        int choosen = robot.Vuforia(cameraMonitorViewId, "red");
+        int choosen = robot.Vuforia(cameraMonitorViewId, "blue");
+        double target = 0;
+
+        switch(choosen) {
+            case(1):
+                target = 0;
+                break;
+            case(2):
+                target = 0;
+                break;
+            case(3):
+                target = 0;
+                break;
+            default:
+                target = 0;
+                break;
+        }
         telemetry.addData("VuMark", "%s visible", choosen);
         telemetry.update();
 

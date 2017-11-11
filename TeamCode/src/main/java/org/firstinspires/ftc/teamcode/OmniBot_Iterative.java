@@ -144,7 +144,7 @@ public class OmniBot_Iterative extends OpMode{
         stick_press1 = gamepad2.left_stick_button;
 
         robot.grabber.setPower(1);
-
+        robot.dumper.setPower(0.4);
 
 
         //slight adjustments for driver
@@ -225,10 +225,10 @@ public class OmniBot_Iterative extends OpMode{
 
         //dumper controlls
         if (right_bumper == true) {
-            robot.dumper.setPosition(.5);
+            robot.dumper.setTargetPosition(480);
         }
         else {
-            robot.dumper.setPosition(0);
+            robot.dumper.setTargetPosition(0);
         }
 
         //claw controlls

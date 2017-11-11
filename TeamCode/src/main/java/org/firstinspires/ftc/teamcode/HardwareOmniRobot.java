@@ -5,6 +5,7 @@ import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -59,7 +60,7 @@ public class HardwareOmniRobot
     public DcMotor wheelie = null;
     public DcMotor grabber = null;
     public Servo jknock = null;
-    public Servo dumper = null;
+    public DcMotor dumper = null;
     // public Servo grabber = null;
     public Servo claw1 = null;
     public Servo claw2 = null;
@@ -107,7 +108,7 @@ public class HardwareOmniRobot
         grabber = hwMap.dcMotor.get("grabber");
         //slide = hwMap.dcMotor.get("slide");
         //reel = hwMap.dcMotor.get("reel");
-        dumper = hwMap.servo.get("dumper");
+        dumper = hwMap.dcMotor.get("dumper");
         claw1 = hwMap.servo.get("claw_1");
         //grabber = hwMap.servo.get("grabber");
         claw2 = hwMap.servo.get("claw_2");
@@ -142,7 +143,9 @@ public class HardwareOmniRobot
         grabber.setDirection(DcMotor.Direction.REVERSE);
         grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         grabber.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+        //dumper.setDirection(DcMotor.Direction.REVERSE);
+        dumper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dumper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Set all motors to zero power
         leftMotor1.setPower(0);
         rightMotor1.setPower(0);
@@ -161,7 +164,7 @@ public class HardwareOmniRobot
         grabber.setPower(0.75);
         grabber.setTargetPosition(1485);
 
-        dumper.setPosition(0);
+        dumper.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
