@@ -39,20 +39,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-/**
- * This file provides basic Telop driving for a Pushbot robot.
- * The code is structured as an Iterative OpMode
- *
- * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
- * All device access is managed through the HardwarePushbot class.
- *
- * This particular OpMode executes a basic Tank Drive Teleop for a PushBot
- * It raises and lowers the claw using the Gampad Y and A buttons respectively.
- * It also opens and closes the claws slowly using the left and right Bumper buttons.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
 
 @Autonomous(name="Omnibot: Red2Simple", group="Omnibot")
 //@Disabled
@@ -72,15 +58,17 @@ public class Red2Simple extends LinearOpMode {
 
         robot.JewelKnock("red");
         robot.DriveFor(0.3,0.0,0.0,0.0);
+        robot.wheelie.setPower(-1.0);
         robot.DriveFor(1.1,-1.0,0.0,0.0);
+        robot.wheelie.setPower(0.0);
         robot.DriveFor(0.3,0.0,0.0,0.0);
-
         robot.DriveFor(1.8,0.0,0.0,0.5);
 
         robot.grabber.setTargetPosition(0);
         robot.claw1.setPosition(0.3);
         robot.claw2.setPosition(0.6);
 
+        //move into position from
         boolean dis = false;
         while(dis == false && runtime.seconds() < 26) {
             double distanceBack = robot.ultra_back.getDistance(DistanceUnit.CM);
