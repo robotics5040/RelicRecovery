@@ -61,6 +61,7 @@ public class HardwareOmniRobot
     public DcMotor grabber = null;
     public Servo jknock = null;
     public DcMotor dumper = null;
+    public AnalogInput ultraSonic = null;
     // public Servo grabber = null;
     public Servo claw1 = null;
     public Servo claw2 = null;
@@ -129,6 +130,8 @@ public class HardwareOmniRobot
         ultra_left.setI2cAddress(I2cAddr.create8bit(0x12));
         ultra_right.setI2cAddress(I2cAddr.create8bit(0x14));
         ultra_back.setI2cAddress(I2cAddr.create8bit(0x16));
+
+        ultraSonic = hwMap.analogInput.get("ultra_sonic");
 
 
         flex = hwMap.analogInput.get("flx");

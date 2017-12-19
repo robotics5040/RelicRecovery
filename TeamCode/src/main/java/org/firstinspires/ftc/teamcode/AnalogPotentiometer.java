@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -21,22 +23,22 @@ public class AnalogPotentiometer {
 
     private final double MAXVOLTAGE = 5;
     private final String MSG5040 = "5040MSG";
-    private AnalogInput potentiometer =null;
+    private AnalogInput potentiometer = null;
     private double maxValue = MAXVOLTAGE;
     private double offset = 0;
 
 
-    AnalogPotentiometer(AnalogInput potentiometer, double maxValue, double offset){
+    AnalogPotentiometer(AnalogInput potentiometer, double maxValue, double offset) {
         this.potentiometer = potentiometer;
         this.maxValue = maxValue;
         this.offset = offset;
     }
 
-    AnalogPotentiometer(AnalogInput potentiometer){
+    AnalogPotentiometer(AnalogInput potentiometer) {
         this.potentiometer = potentiometer;
     }
 
-    public double getValue(){
+    public double getValue() {
         double conversion = 0;
 
         try {
@@ -48,11 +50,12 @@ public class AnalogPotentiometer {
         return conversion;
     }
 
-    public double getValueRaw(){
+    public double getValueRaw() {
         return potentiometer.getVoltage();
     }
 
-    public String toString(){
+    public String toString() {
         return Double.toString(getValue());
     }
+
 }

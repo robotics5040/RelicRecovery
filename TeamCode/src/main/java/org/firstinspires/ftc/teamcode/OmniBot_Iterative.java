@@ -325,10 +325,11 @@ public class OmniBot_Iterative extends OpMode{
         telemetry.addData("2nd Left Trigger",LX);
         telemetry.addData("2nd Right Trigger",RX);
         telemetry.addData("Wrist Position: ",wrist_num);
-        //telemetry.addData("Ultra front", robot.ultra_front.getDistance(DistanceUnit.CM));
+        /*telemetry.addData("Ultra front", robot.ultra_front.getDistance(DistanceUnit.CM));
         telemetry.addData("Ultra back", robot.ultra_back.getDistance(DistanceUnit.CM));
         telemetry.addData("Ultra left", robot.ultra_left.getDistance(DistanceUnit.CM));
-        telemetry.addData("Ultra right", robot.ultra_right.getDistance(DistanceUnit.CM));
+        telemetry.addData("Ultra right", robot.ultra_right.getDistance(DistanceUnit.CM));*/
+        telemetry.addData("Ultra Sonic: ", robot.ultraSonic.getVoltage());
         telemetry.addLine("What is my name?: Spitz");
 
         if(NavXTemp == true)
